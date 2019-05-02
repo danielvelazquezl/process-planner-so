@@ -1,4 +1,4 @@
-package planificadorprocesos;
+package processplanner;
 
 public class PCB {
     private int pid, burstTime, arrivalTime;

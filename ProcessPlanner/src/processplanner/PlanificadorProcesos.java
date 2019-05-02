@@ -1,4 +1,4 @@
-package planificadorprocesos;
+package processplanner;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

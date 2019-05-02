@@ -1,1 +1,4 @@
 *.pdf
+/ProcessPlanner/build/
+/ProcessPlanner/nbproject/private/
+/ProcessPlanner/dist/
