@@ -10,6 +10,7 @@ public class PlanificadorProcesos {
 
     public static void main(String[] args) {
         loadProcess("/home/daniel/Desktop/process.txt");
+	
         
     }
 
