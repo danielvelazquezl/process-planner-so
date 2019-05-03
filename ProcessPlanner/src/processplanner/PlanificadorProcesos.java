@@ -9,18 +9,19 @@ import java.util.ArrayList;
 public class PlanificadorProcesos {
 
     public static void main(String[] args) {
-        loadProcess("/home/daniel/Desktop/process.txt");
-	
+        ArrayList workQueue = new ArrayList();
+        loadProcess("/home/junior/Documentos/process.txt", workQueue);
+	FCFS fcfs = new FCFS(workQueue);
+        fcfs.plan();
+        fcfs.imprimir();
         
     }
 
-    private static void loadProcess(String path) {
+    private static void loadProcess(String path, ArrayList processes) {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
         
-        ArrayList processes = new ArrayList();
-       
         try {
             br = new BufferedReader(new FileReader(path));
             while ((line = br.readLine()) != null) {
