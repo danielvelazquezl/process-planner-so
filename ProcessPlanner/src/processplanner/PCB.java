@@ -1,8 +1,10 @@
 package processplanner;
 
 public class PCB {
+    
     private int pid, burstTime, arrivalTime;
     private String pName;
+    
     public PCB(int pid, String pName, int burstTime, int arrivalTime) {
         this.pid = pid;
         this.pName = pName;
@@ -11,11 +13,11 @@ public class PCB {
     }
 
     public int getPid() {
-        return pid;
+        return this.pid;
     }
 
     public int getBurstTime() {
-        return burstTime;
+        return this.burstTime;
     }
 
     public void decreaseBurstTime() {
@@ -23,10 +25,10 @@ public class PCB {
     }
 
     public int getArrivalTime() {
-        return arrivalTime;
+        return this.arrivalTime;
     }
 
     public String getpName() {
-        return pName;
+        return this.pName;
     }
 }
