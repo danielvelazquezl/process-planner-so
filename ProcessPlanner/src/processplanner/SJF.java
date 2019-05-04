@@ -9,13 +9,14 @@ public class SJF {
      * Plan the processes according to the burst time
      * @param readyQueue 
      */
-    public void plan(ArrayList readyQueue){
+    public static void plan(ArrayList readyQueue){
         Collections.sort(readyQueue, (PCB p1, PCB p2) -> 
-            new Integer(p1.getBurstTime()).compareTo(new Integer(p2.getBurstTime())));
+            new Integer(p1.getBurstTime()).compareTo(p2.getBurstTime()));
     }
     
     /**
      * Method to find the waiting time for all processes
+     * https://www.geeksforgeeks.org/program-shortest-job-first-scheduling-set-2srtf-make-changesdoneplease-review/
      * @param proc processes list
      * @param n list length
      * @param wt waiting time array
@@ -104,5 +105,11 @@ public class SJF {
 
         // Print the total average time
         System.out.println("Average waiting time = " + (float) total_wt / (float) n);
+    }
+    
+    public static void printQueue(ArrayList<PCB> readyQueue){
+        readyQueue.forEach((p) -> {
+            System.out.println(p.getpName());
+        });
     }
 }
