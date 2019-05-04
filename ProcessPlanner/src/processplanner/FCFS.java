@@ -2,7 +2,7 @@ package processplanner;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+
 
 /**
  *
@@ -19,12 +19,12 @@ public class FCFS {
     }
     
     public void plan(){
-        Collections.sort(readyQueue, (PCB p1, PCB p2) -> 
+        Collections.sort(this.readyQueue, (PCB p1, PCB p2) -> 
             new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
     }
     
     public void imprimir(){
-        readyQueue.forEach((aux) -> {
+        this.readyQueue.forEach((aux) -> {
             System.out.println(aux.getpName());
         });
     }
