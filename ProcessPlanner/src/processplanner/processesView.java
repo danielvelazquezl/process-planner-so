@@ -15,7 +15,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     WorkQueue workQueue;
 
     Timer temp;
-    int fps = 30;
+    int fps = 1;
     boolean pause = true;
 
     /**
@@ -30,10 +30,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setInitialDelay(0);
 
         workQueue = new WorkQueue();
-        workQueue.loadProcess("/home/daniel/Desktop/processes.txt");
+        workQueue.loadProcess("/home/junior/Documentos/process.txt");
 
         cpu = new PlanificadorCPU(workQueue.getProcesses());
         cpu.setFps(delay);
+
+        this.run.addActionListener(this);
+        this.comboBoxAlgorithms.addActionListener(this);
 
         updateUiStatus();
 
@@ -107,7 +110,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel2.setText("Cantidad de ráfagas");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 76, -1, -1));
 
-        comboBoxAlgorithms.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "Colas multinivel" }));
+        comboBoxAlgorithms.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Colas multinivel" }));
         getContentPane().add(comboBoxAlgorithms, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 34, 140, -1));
 
         jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
@@ -244,7 +247,20 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
                 stopSimulation();
             }
             repaint();
+        } 
+        // Algoritmos a escojer
+        else if (ae.getSource() == comboBoxAlgorithms) {
+            if("FCFS".equals(comboBoxAlgorithms.getSelectedItem().toString())){
+                System.out.println("FCFS");
+            }
+            if("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())){
+                System.out.println("SJF");
+            }
+            if("RR".equals(comboBoxAlgorithms.getSelectedItem().toString())){
+                System.out.println("RR");
+            }
         }
+
     }
 
     public synchronized void starSimulation() {
