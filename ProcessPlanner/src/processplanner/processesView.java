@@ -64,6 +64,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jTable2 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         cpuTime = new javax.swing.JLabel();
+        stop = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -95,7 +96,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         run.setText("RUN");
         run.setToolTipText("");
-        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(693, 98, 100, -1));
+        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 70, -1));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -155,11 +156,15 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Tiempo de CPU:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, -1, -1));
 
         cpuTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         cpuTime.setText("0");
-        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 100, -1, -1));
+        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, -1, -1));
+
+        stop.setText("STOP");
+        stop.setToolTipText("");
+        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 100, 70, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -216,12 +221,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField processName;
     private javax.swing.JButton run;
+    private javax.swing.JButton stop;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == run) {
-            if (!pause) {
+            if (pause == false) {
                 System.out.println("run pressed");
                 pause = true;
                 stopSimulation();
