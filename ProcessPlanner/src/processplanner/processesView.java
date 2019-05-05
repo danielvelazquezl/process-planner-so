@@ -15,12 +15,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     WorkQueue workQueue;
 
     Timer temp;
-    int fps = 1;
+    int fps = 5;
     boolean pause = true;
 
     /**
      * Creates new form processesView
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public processesView() {
         initComponents();
 
@@ -30,12 +31,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setInitialDelay(0);
 
         workQueue = new WorkQueue();
-        workQueue.loadProcess("/home/junior/Documentos/process.txt");
+        workQueue.loadProcess("/home/daniel/Desktop/processes.txt");
 
         cpu = new PlanificadorCPU(workQueue.getProcesses());
         cpu.setFps(delay);
 
         this.run.addActionListener(this);
+        this.stop.addActionListener(this);
         this.comboBoxAlgorithms.addActionListener(this);
 
         updateUiStatus();
@@ -68,6 +70,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel4 = new javax.swing.JLabel();
         cpuTime = new javax.swing.JLabel();
         stop = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,26 +92,26 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         processName.setToolTipText("Nombre de proceso");
-        getContentPane().add(processName, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 99, 124, -1));
+        getContentPane().add(processName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 124, -1));
 
         burstAmount.setToolTipText("Cantidad de rafagas");
-        getContentPane().add(burstAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 99, 140, -1));
+        getContentPane().add(burstAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 140, -1));
 
-        addProcess.setText("Agregar proceso");
-        getContentPane().add(addProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 98, -1, -1));
+        addProcess.setText("Agregar");
+        getContentPane().add(addProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, 100, -1));
 
         run.setText("RUN");
         run.setToolTipText("");
-        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 100, 70, -1));
+        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 110, 70, -1));
 
-        jLabel1.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Nombre de proceso");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 76, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel2.setText("Cantidad de ráfagas");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 76, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, -1, -1));
 
         comboBoxAlgorithms.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Colas multinivel" }));
         getContentPane().add(comboBoxAlgorithms, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 34, 140, -1));
@@ -123,7 +126,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jTextArea2.setText("no se si fue una lagrima, quien mas va sacarte a bailar lentos, en el living de su de esos las 10");
         jScrollPane3.setViewportView(jTextArea2);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 140, 395, 230));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 150, 395, 230));
 
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -155,19 +158,24 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         });
         jScrollPane4.setViewportView(jTable2);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 380, 230));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 380, 230));
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Tiempo de CPU:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 120, -1, -1));
 
         cpuTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         cpuTime.setText("0");
-        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 100, -1, -1));
+        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, -1, -1));
 
         stop.setText("STOP");
         stop.setToolTipText("");
-        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 100, 70, -1));
+        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 110, 70, -1));
+
+        jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel5.setText("Nuevo proceso");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 270, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -216,6 +224,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -230,16 +239,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == run) {
-            if (pause == false) {
-                System.out.println("run pressed");
-                pause = true;
-                stopSimulation();
-                cpu.setPaused(true);
-            } else {
-                cpu.setPaused(false);
-                pause = false;
-                starSimulation();
-            }
+            cpu.setPaused(false);
+            pause = false;
+            starSimulation();
+        } else if (ae.getSource() == stop) {
+            pause = true;
+            stopSimulation();
+            cpu.setPaused(true);
         } else if (ae.getSource() == temp) {
             if (cpu.nextCycle()) {
                 updateUiStatus();
@@ -263,7 +269,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     }
 
-    public synchronized void starSimulation() {
+    private synchronized void starSimulation() {
         if (pause) {
 
         } else {
@@ -273,13 +279,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    public synchronized void stopSimulation() {
+    private synchronized void stopSimulation() {
         if (temp.isRunning()) {
             temp.stop();
         }
     }
 
-    public void updateUiStatus() { //reloj
+    private void updateUiStatus() { //reloj
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
     }
 
