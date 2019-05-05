@@ -6,7 +6,7 @@
 package processplanner;
 
 import java.util.ArrayList;
-import java.util.Vector;
+
 
 /**
  *
@@ -63,7 +63,14 @@ public class PlanificadorCPU {
     private int processesOut = 0;
 
     /**
-     * Algoritmo por defecto a utilizar
+     * Algoritmo por defecto a utilizarpublic Boolean getPaused() {
+        return paused;
+    }
+
+
+    public void setPaused(Boolean paused) {
+        this.paused = paused;
+    }
      */
     private int algorithm = FCFS;
 
@@ -312,5 +319,24 @@ public class PlanificadorCPU {
         purgeWorkQueue();
         purgeReadyQueue();
     }
+
+    public int getFps() {
+        return fps;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
+    }
+
+    public Boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(Boolean paused) {
+        this.paused = paused;
+    }
+
+
+    
 
 }
