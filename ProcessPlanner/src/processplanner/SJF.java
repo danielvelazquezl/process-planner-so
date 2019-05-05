@@ -21,11 +21,11 @@ public class SJF {
      * @param n list length
      * @param wt waiting time array
      */
-    public void findWaitingTime(ArrayList<PCB> proc, int n, int wt[]) {
-        int rt[] = new int[n];
+    public static void findWaitingTime(ArrayList<PCB> proc, int wt[]) {
+        int rt[] = new int[proc.size()];
 
         // Copy the burst time into rt[] 
-        for (int i = 0; i < n; i++) rt[i] = proc.get(i).getBurstTime(); 
+        for (int i = 0; i < proc.size(); i++) rt[i] = proc.get(i).getBurstTime(); 
 
         int complete = 0, t = 0, minm = Integer.MAX_VALUE;
         int shortest = 0, finish_time;
@@ -33,13 +33,13 @@ public class SJF {
 
         // Process until all processes gets 
         // completed 
-        while (complete != n) {
+        while (complete != proc.size()) {
 
             // Find process with minimum 
             // remaining time among the 
             // processes that arrives till the 
             // current time` 
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < proc.size(); j++) {
                 if ((proc.get(j).getArrivalTime() <= t)
                         && (rt[j] < minm) && rt[j] > 0) {
                     minm = rt[j];
@@ -76,7 +76,7 @@ public class SJF {
 
                 // Calculate waiting time 
                 wt[shortest] = finish_time
-                        - proc.get(shortest).getArrivalTime()
+                        - proc.get(shortest).getBurstTime()
                         - proc.get(shortest).getArrivalTime();
 
                 if (wt[shortest] < 0) {
@@ -98,7 +98,7 @@ public class SJF {
 
         // Function to find waiting time of all 
         // processes 
-        findWaitingTime(proc, n, wt);
+        findWaitingTime(proc, wt);
 
         // Calculate total waiting time and 
         for (int i = 0; i < n; i++) total_wt =+ wt[i];

@@ -240,4 +240,23 @@ public class PlanificadorCPU {
             }
         }
     }
+    
+    public void simulate() {
+        while (nextCycle())
+            ;
+    }
+    
+    public boolean nextCycle() {
+        boolean next = false;
+        if (false) { // si la cola esta vacia, parar
+            next = false;
+        } else {
+            next = true;
+            currentTime++;
+        }
+        //recoleccion de estadisticas
+        return next;
+    }
+
+    
 }

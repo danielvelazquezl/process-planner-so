@@ -23,7 +23,7 @@ public class WorkQueue {
         this.workQueue = new ArrayList<>();
     }
 
-    private void loadProcess(String path) {
+    public void loadProcess(String path) {
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ",";
@@ -48,4 +48,9 @@ public class WorkQueue {
             }
         }
     }
+    
+    public ArrayList<PCB> getProcesses() {
+        return workQueue;
+    }
+    
 }
