@@ -76,6 +76,7 @@ public class PlanificadorCPU {
      * Coleccion de todos los procesos que seran usados
      */
     private ArrayList<PCB> workQueue;
+    private ArrayList<PCB> allProcess;
 
     /**
      * Coleccion de todos los procesos que han llegado y requieren CPU
@@ -141,8 +142,8 @@ public class PlanificadorCPU {
     private void RunFCFS(ArrayList readyQ) {
         try {
             if (this.occupiedTime == 0 || this.activeProcess.isFinished()) {
-                this.activeProcess = encontrarProcesoLlegaPrimero(readyQ);
-                indexProcesoActivo = readyQ.indexOf(procesoActivo);
+                this.activeProcess = nextProcessArriveFirst(readyQ);
+                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
             }
         } catch (NullPointerException e) {
         }
@@ -151,8 +152,8 @@ public class PlanificadorCPU {
     private void RunSJF(ArrayList readyQ) {
         try {
             if (this.occupiedTime == 0 || this.activeProcess.isFinished()) {
-                this.activeProcess = encontrarProcesoMasPequeno(readyQ);
-                indexProcesoActivo = jq.indexOf(procesoActivo);
+                this.activeProcess = nextProcessShortest(readyQ);
+                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
             }
         } catch (NullPointerException e) {
         }
@@ -162,7 +163,7 @@ public class PlanificadorCPU {
         try {
             if (this.occupiedTime == 0 || this.activeProcess.isFinished() || quantumCounter == 0) {
                 this.activeProcess = nextProcessRR(readyQ);
-                indexProcesoActivo = jq.indexOf(procesoActivo);
+                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
                 this.quantumCounter = quantum;
             }
             this.quantumCounter--;
@@ -187,4 +188,56 @@ public class PlanificadorCPU {
         return nextP;
     }
 
+    private PCB nextProcessShortest(ArrayList readyQ) {
+        PCB nextP = null, shortest = null;
+        long time = 0, shortTime = 0;
+
+        for (int i = 0; i < readyQ.size(); ++i) {
+            nextP = (PCB) readyQ.get(i);
+            time = nextP.getBurstTime();
+            if ((time < shortTime) || (i == 0)) {
+                shortTime = time;
+                shortest = nextP;
+            }
+        }
+        return shortest;
+    }
+
+    private PCB nextProcessArriveFirst(ArrayList readyQ) {
+        PCB nextP = null, earliest = null;
+        long time = 0, arriveTime = 0;
+
+        for (int i = 0; i < readyQ.size(); ++i) {
+            nextP = (PCB) readyQ.get(i);
+            time = nextP.getArrivalTime();
+            if ((time < arriveTime) || (i == 0)) {
+                arriveTime = time;
+                earliest = nextP;
+            }
+        }
+        return earliest;
+    }
+
+    private void loadReadyQueue() {
+        PCB p;
+        for (int i = 0; i < this.workQueue.size(); i++) {
+            p = (PCB) workQueue.get(i);
+            if (p.getArrivalTime() == this.currentTime) {
+                this.readyQueue.add(p);
+                this.processesIn++;
+            }
+        }
+
+    }
+
+    void purgeReadyQueue() {
+        PCB p;
+        for (int i = 0; i < this.readyQueue.size(); i++) {
+            p = (PCB) this.readyQueue.get(i);
+            if (p.isFinished() == true) {
+                this.readyQueue.remove(i);
+                this.processesOut++;
+            }
+        }
+    }
 }
