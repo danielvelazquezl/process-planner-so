@@ -246,12 +246,15 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         else if (ae.getSource() == comboBoxAlgorithms) {
             if("FCFS".equals(comboBoxAlgorithms.getSelectedItem().toString())){
                 System.out.println("FCFS");
+                cpu.setAlgorithm(PlanificadorCPU.FCFS);
             }
             if("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())){
                 System.out.println("SJF");
+                cpu.setAlgorithm(PlanificadorCPU.SJF);
             }
             if("RR".equals(comboBoxAlgorithms.getSelectedItem().toString())){
                 System.out.println("RR");
+                cpu.setAlgorithm(PlanificadorCPU.ROUNDROBIN);
             }
         }
 
