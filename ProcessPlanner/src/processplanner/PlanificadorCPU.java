@@ -102,6 +102,7 @@ public class PlanificadorCPU {
 
     public PlanificadorCPU(ArrayList workQueue) {
         this.workQueue = new ArrayList<>(workQueue);
+        this.allProcess = new ArrayList<>(workQueue);
     }
 
     /**
@@ -230,7 +231,7 @@ public class PlanificadorCPU {
 
     }
 
-    void purgeReadyQueue() {
+    private void purgeReadyQueue() {
         PCB p;
         for (int i = 0; i < this.readyQueue.size(); i++) {
             p = (PCB) this.readyQueue.get(i);
@@ -240,23 +241,75 @@ public class PlanificadorCPU {
             }
         }
     }
-    
-    public void simulate() {
-        while (nextCycle())
-            ;
-    }
-    
-    public boolean nextCycle() {
-        boolean next = false;
-        if (false) { // si la cola esta vacia, parar
-            next = false;
-        } else {
-            next = true;
-            currentTime++;
+
+    private void purgeWorkQueue() {
+        PCB p;
+        for (int i = 0; i < this.workQueue.size(); i++) {
+            p = (PCB) this.workQueue.get(i);
+            if (p.isFinished() == true) {
+                this.workQueue.remove(i);
+            }
         }
-        //recoleccion de estadisticas
-        return next;
     }
 
-    
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public long getInactivityTime() {
+        return inactivityTime;
+    }
+
+    public long getOccupiedTime() {
+        return occupiedTime;
+    }
+
+    public long getQuantum() {
+        return quantum;
+    }
+
+    public void setQuantum(long quantum) {
+        this.quantum = quantum;
+    }
+
+    public int getAlgorithm() {
+        return this.algorithm;
+    }
+
+    public void setAlgorithm(int algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    public PCB getActiveProcess() {
+        return activeProcess;
+    }
+
+    public void simulate() {
+        while (nextCycle());
+    }
+
+    public boolean nextCycle() {
+        boolean moreCycles = false;
+        if (this.workQueue.isEmpty()) {
+            moreCycles = false;
+        } else {
+            loadReadyQueue();
+            moreCycles = true;
+            if (this.readyQueue.isEmpty()) {
+                this.inactivityTime++;
+            } else {
+                planner();
+                this.occupiedTime++;
+                cleanUp();
+            }
+            this.currentTime++;
+        }
+        //recoleccionEstadisticas();
+        return moreCycles;
+    }
+
+    private void cleanUp() {
+        purgeWorkQueue();
+        purgeReadyQueue();
+    }
 }
