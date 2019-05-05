@@ -319,24 +319,4 @@ public class PlanificadorCPU {
         purgeWorkQueue();
         purgeReadyQueue();
     }
-
-    public int getFps() {
-        return fps;
-    }
-
-    public void setFps(int fps) {
-        this.fps = fps;
-    }
-
-    public Boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(Boolean paused) {
-        this.paused = paused;
-    }
-
-
-    
-
 }

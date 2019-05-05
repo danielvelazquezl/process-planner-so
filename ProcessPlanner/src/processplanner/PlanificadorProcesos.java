@@ -10,10 +10,18 @@ public class PlanificadorProcesos {
 
     public static void main(String[] args) {
         ArrayList workQueue = new ArrayList();
-        loadProcess("/home/junior/Documentos/process.txt", workQueue);
-	FCFS fcfs = new FCFS(workQueue);
-        fcfs.plan();
-        fcfs.imprimir();
+        loadProcess("/home/daniel/Desktop/process.txt", workQueue);
+	//FCFS fcfs = new FCFS(workQueue);
+        //fcfs.plan();
+        //fcfs.imprimir();
+        int wl[] = new int[workQueue.size()];
+        SJF.printQueue(workQueue);
+        System.out.println("\n");
+        SJF.findWaitingTime(workQueue, wl);
+        for (int i = 0; i < wl.length; i++) System.out.println(wl[i]);
+        SJF.plan(workQueue);
+        SJF.printQueue(workQueue);
+        
         
     }
 
