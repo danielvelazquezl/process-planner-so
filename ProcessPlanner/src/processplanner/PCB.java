@@ -32,7 +32,7 @@ public class PCB {
 
         }
         this.tBurst--;
-        if (tBurst == 0) {
+        if (this.tBurst == 0) {
             this.finished = true;
             this.finishedTime = currentTime;
         }
