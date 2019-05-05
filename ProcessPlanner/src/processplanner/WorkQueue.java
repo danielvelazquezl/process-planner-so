@@ -48,4 +48,9 @@ public class WorkQueue {
             }
         }
     }
+    
+    public ArrayList<PCB> getProcesses() {
+        return workQueue;
+    }
+    
 }
