@@ -291,6 +291,7 @@ public class PlanificadorCPU {
         return activeProcess;
     }
 
+    @SuppressWarnings("empty-statement")
     public void simulate() {
         while (nextCycle());
     }

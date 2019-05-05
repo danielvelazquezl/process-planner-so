@@ -1,4 +1,3 @@
-
 package processplanner;
 
 import java.awt.event.ActionEvent;
@@ -10,27 +9,34 @@ import javax.swing.Timer;
  * @author daniel
  */
 public class processesView extends javax.swing.JFrame implements ActionListener {
-    
+
     PlanificadorCPU cpu;
-    
+
     WorkQueue workQueue;
-    
+
     Timer temp;
-    
+    int fps = 30;
+    boolean pause = true;
+
     /**
      * Creates new form processesView
      */
     public processesView() {
         initComponents();
-        
-        temp = new Timer(30, this);
+
+        int delay = (fps > 0) ? (1000 / fps) : 100;
+        temp = new Timer(delay, this);
         temp.setCoalesce(false);
         temp.setInitialDelay(0);
-        
+
         workQueue = new WorkQueue();
         workQueue.loadProcess("/home/daniel/Desktop/processes.txt");
-        
+
         cpu = new PlanificadorCPU(workQueue.getProcesses());
+        cpu.setFps(delay);
+
+        updateUiStatus();
+
     }
 
     /**
@@ -215,13 +221,44 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == run) {
-            System.out.println("run pressed");
-            temp.start();
+            if (!pause) {
+                System.out.println("run pressed");
+                pause = true;
+                stopSimulation();
+                cpu.setPaused(true);
+            } else {
+                cpu.setPaused(false);
+                pause = false;
+                starSimulation();
+            }
         } else if (ae.getSource() == temp) {
             if (cpu.nextCycle()) {
-                //cpuTime.setText(Integer.toString(cpu.));
+                updateUiStatus();
+            } else {
+                stopSimulation();
             }
             repaint();
         }
     }
+
+    public synchronized void starSimulation() {
+        if (pause) {
+
+        } else {
+            if (!temp.isRunning()) {
+                temp.start();
+            }
+        }
+    }
+
+    public synchronized void stopSimulation() {
+        if (temp.isRunning()) {
+            temp.stop();
+        }
+    }
+
+    public void updateUiStatus() { //reloj
+        cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
+    }
+
 }
