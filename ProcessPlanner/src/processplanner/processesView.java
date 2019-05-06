@@ -31,7 +31,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setInitialDelay(0);
 
         workQueue = new WorkQueue();
-        workQueue.loadProcess("/home/daniel/Desktop/processes.txt");
+        //workQueue.loadProcess("/home/daniel/Desktop/processes.txt");
+        workQueue.loadProcess("/home/junior/Documentos/process.txt");
 
         cpu = new PlanificadorCPU(workQueue.getProcesses());
         cpu.setFps(delay);
@@ -290,6 +291,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     private void updateUiStatus() { //reloj
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
+        if(cpu.getActiveProcess() != null){
+            System.out.print("En tiempo = "+ cpu.getCurrentTime() + "->");
+            System.out.println(cpu.getActiveProcess().getpName());
+        }
+        
     }
 
 }

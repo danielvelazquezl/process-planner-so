@@ -169,7 +169,10 @@ public class PlanificadorCPU {
 
     private void RunRoundRobin(ArrayList readyQ) {
         try {
-            if (this.occupiedTime == 0 || this.activeProcess.isFinished() || quantumCounter == 0) {
+            if(this.occupiedTime == 0){
+                this.activeProcess = (PCB)readyQ.get(0);
+            }
+            if (this.activeProcess.isFinished() || quantumCounter == 0) {
                 this.activeProcess = nextProcessRR(readyQ);
                 this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
                 this.quantumCounter = quantum;
