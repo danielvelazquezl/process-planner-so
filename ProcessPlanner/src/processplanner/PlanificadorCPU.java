@@ -45,6 +45,8 @@ public class PlanificadorCPU {
      * Cuenta atr�s de cu�ndo interrumpir un proceso, porque su quantum termino
      */
     private long quantumCounter = quantum;
+    
+    boolean preemptive = true;
 
     /**
      * Solo Round Robin, esta variable mantiene un registro del n�mero de
@@ -159,7 +161,7 @@ public class PlanificadorCPU {
 
     private void RunSJF(ArrayList readyQ) {
         try {
-            if (this.occupiedTime == 0 || this.activeProcess.isFinished()) {
+            if (this.occupiedTime == 0 || this.activeProcess.isFinished() || this.preemptive == true) {
                 this.activeProcess = nextProcessShortest(readyQ);
                 this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
             }
@@ -236,6 +238,7 @@ public class PlanificadorCPU {
             if (p.getArrivalTime() == this.currentTime) {
                 this.readyQueue.add(p);
                 this.processesIn++;
+                this.preemptive = true;
             }
         }
 
