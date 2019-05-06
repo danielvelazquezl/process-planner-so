@@ -386,7 +386,7 @@ public class PlanificadorCPU {
         processesOut = 0;
         workQueue.clear();
         readyQueue.clear();
-        loadProcess("/home/daniel/Desktop/processes.txt");
+        loadProcess("processes.txt");
     }
     
 }
