@@ -85,12 +85,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="run">
       <Properties>
-        <Property name="text" type="java.lang.String" value="RUN"/>
+        <Property name="text" type="java.lang.String" value="Iniciar"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="640" y="110" width="70" height="-1"/>
+          <AbsoluteConstraints x="180" y="30" width="70" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -253,12 +253,12 @@
     </Component>
     <Component class="javax.swing.JButton" name="stop">
       <Properties>
-        <Property name="text" type="java.lang.String" value="STOP"/>
+        <Property name="text" type="java.lang.String" value="Parar"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="720" y="110" width="70" height="-1"/>
+          <AbsoluteConstraints x="260" y="30" width="70" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -273,6 +273,17 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="70" width="270" height="-1"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JButton" name="restart">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Reiniciar"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="340" y="30" width="90" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

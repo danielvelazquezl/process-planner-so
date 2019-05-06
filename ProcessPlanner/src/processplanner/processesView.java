@@ -12,8 +12,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     PlanificadorCPU cpu;
 
-    WorkQueue workQueue;
-
     Timer temp;
     int fps = 5;
     boolean pause = true;
@@ -30,16 +28,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setCoalesce(false);
         temp.setInitialDelay(0);
 
-        workQueue = new WorkQueue();
-        //workQueue.loadProcess("/home/daniel/Desktop/processes.txt");
-        workQueue.loadProcess("/home/junior/Documentos/process.txt");
-
-        cpu = new PlanificadorCPU(workQueue.getProcesses());
+        cpu = new PlanificadorCPU("/home/daniel/Desktop/processes.txt");
         cpu.setFps(delay);
 
         this.run.addActionListener(this);
         this.stop.addActionListener(this);
         this.comboBoxAlgorithms.addActionListener(this);
+        this.restart.addActionListener(this);
 
         updateUiStatus();
 
@@ -72,6 +67,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         cpuTime = new javax.swing.JLabel();
         stop = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        restart = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -101,9 +97,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         addProcess.setText("Agregar");
         getContentPane().add(addProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, 100, -1));
 
-        run.setText("RUN");
+        run.setText("Iniciar");
         run.setToolTipText("");
-        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 110, 70, -1));
+        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 70, -1));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -169,14 +165,18 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         cpuTime.setText("0");
         getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, -1, -1));
 
-        stop.setText("STOP");
+        stop.setText("Parar");
         stop.setToolTipText("");
-        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 110, 70, -1));
+        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 70, -1));
 
         jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel5.setText("Nuevo proceso");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 270, -1));
+
+        restart.setText("Reiniciar");
+        restart.setToolTipText("");
+        getContentPane().add(restart, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, 90, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -233,17 +233,20 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField processName;
+    private javax.swing.JButton restart;
     private javax.swing.JButton run;
     private javax.swing.JButton stop;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void actionPerformed(ActionEvent ae) {
+        //ejecutar
         if (ae.getSource() == run) {
             cpu.setPaused(false);
             pause = false;
             starSimulation();
-        } else if (ae.getSource() == stop) {
+        } //parar la ejecucion
+        else if (ae.getSource() == stop) {
             pause = true;
             stopSimulation();
             cpu.setPaused(true);
@@ -254,21 +257,25 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
                 stopSimulation();
             }
             repaint();
-        } 
-        // Algoritmos a escojer
+        } // Algoritmos a escojer
         else if (ae.getSource() == comboBoxAlgorithms) {
-            if("FCFS".equals(comboBoxAlgorithms.getSelectedItem().toString())){
+            if ("FCFS".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
                 System.out.println("FCFS");
                 cpu.setAlgorithm(PlanificadorCPU.FCFS);
             }
-            if("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())){
+            if ("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
                 System.out.println("SJF");
                 cpu.setAlgorithm(PlanificadorCPU.SJF);
             }
-            if("RR".equals(comboBoxAlgorithms.getSelectedItem().toString())){
+            if ("RR".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
                 System.out.println("RR");
                 cpu.setAlgorithm(PlanificadorCPU.ROUNDROBIN);
             }
+        } //reiniciar procesos
+        else if (ae.getSource() == restart) {
+            cpu.restart();
+            updateUiStatus();
+            repaint();
         }
 
     }
@@ -291,11 +298,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     private void updateUiStatus() { //reloj
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
-        if(cpu.getActiveProcess() != null){
-            System.out.print("En tiempo = "+ cpu.getCurrentTime() + "->");
+        if (cpu.getActiveProcess() != null) {
+            System.out.print("En tiempo = " + cpu.getCurrentTime() + "->");
             System.out.println(cpu.getActiveProcess().getpName());
         }
-        
+
     }
 
 }

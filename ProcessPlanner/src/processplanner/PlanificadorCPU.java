@@ -4,16 +4,20 @@
  * and open the template in the editor.
  */
 package processplanner;
-
+// <editor-fold defaultstate="collapsed" desc="Imports">
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-
+// </editor-fold>    
 
 /**
  *
  * @author junior
  */
 public class PlanificadorCPU {
-
+// <editor-fold defaultstate="collapsed" desc="Variables">
     /**
      * Constantes que especifican cada tipo de algoritmo
      */
@@ -84,13 +88,13 @@ public class PlanificadorCPU {
     /**
      * Coleccion de todos los procesos que seran usados
      */
-    private ArrayList<PCB> workQueue;
+    private ArrayList<PCB> workQueue = new ArrayList<>();
     private ArrayList<PCB> allProcess;
 
     /**
      * Coleccion de todos los procesos que han llegado y requieren CPU
      */
-    private ArrayList<PCB> readyQueue = new ArrayList<PCB>();
+    private ArrayList<PCB> readyQueue = new ArrayList<>();
 
     /**
      * Referencia al proceso activo. El cpu cambia esta refencia a diferentes
@@ -108,12 +112,40 @@ public class PlanificadorCPU {
      * Flag para verificar si fue pausada la ejecucion
      */
     private Boolean paused = false;
+// </editor-fold>    
 
-    public PlanificadorCPU(ArrayList workQueue) {
-        this.workQueue = new ArrayList<>(workQueue);
+    public PlanificadorCPU(String path) {
+        loadProcess(path);
         this.allProcess = new ArrayList<>(workQueue);
+        
     }
 
+    private void loadProcess(String path) {
+        BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+
+        try {
+            br = new BufferedReader(new FileReader(path));
+            while ((line = br.readLine()) != null) {
+                String[] process = line.split(cvsSplitBy);
+                this.workQueue.add(new PCB(Integer.parseInt(process[0]), process[1], Integer.parseInt(process[2]), Integer.parseInt(process[3])));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
     /**
      * Utilice el planificador apropiado para elegir el siguiente proceso. A
      * continuaci�n, enviaremos el proceso.
@@ -341,6 +373,20 @@ public class PlanificadorCPU {
 
     public void setPaused(Boolean paused) {
         this.paused = paused;
+    }
+    
+    public void restart() {
+        activeProcess = null;
+        currentTime = 0;
+        occupiedTime = 0;
+        quantum = 4;
+        quantumCounter = quantum;
+        turnCounter = 0;
+        processesIn = 0;
+        processesOut = 0;
+        workQueue.clear();
+        readyQueue.clear();
+        loadProcess("/home/daniel/Desktop/processes.txt");
     }
     
 }
