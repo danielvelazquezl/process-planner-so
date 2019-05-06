@@ -28,7 +28,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setCoalesce(false);
         temp.setInitialDelay(0);
 
-        cpu = new PlanificadorCPU("/home/daniel/Desktop/processes.txt");
+        cpu = new PlanificadorCPU("/home/junior/Documentos/process.txt");
         cpu.setFps(delay);
 
         this.run.addActionListener(this);
