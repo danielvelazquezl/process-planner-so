@@ -5,6 +5,7 @@
  */
 package processplanner;
 // <editor-fold defaultstate="collapsed" desc="Imports">
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
  */
 public class PlanificadorCPU {
 // <editor-fold defaultstate="collapsed" desc="Variables">
+
     /**
      * Constantes que especifican cada tipo de algoritmo
      */
@@ -46,37 +48,17 @@ public class PlanificadorCPU {
     private long quantum = 4;
 
     /**
-     * Cuenta atr�s de cu�ndo interrumpir un proceso, porque su quantum termino
+     * Cuenta atras de cuando interrumpir un proceso, porque su quantum termino
      */
     private long quantumCounter = quantum;
-    
+
+    /**
+     * Para SJF expulsivo
+     */
     boolean preemptive = true;
 
     /**
-     * Solo Round Robin, esta variable mantiene un registro del n�mero de
-     * quantum consecutivos que un proceso ha consumido
-     */
-    private long turnCounter = 0;
-
-    /**
-     * Cantidad de procesos preparados para ejecucion
-     */
-    private int processesIn = 0;
-
-    /**
-     * Cantidad de procesos que se han ejecutado hasta el final
-     */
-    private int processesOut = 0;
-
-    /**
-     * Algoritmo por defecto a utilizarpublic Boolean getPaused() {
-        return paused;
-    }
-
-
-    public void setPaused(Boolean paused) {
-        this.paused = paused;
-    }
+     * Algoritmo por defecto a utilizar
      */
     private int algorithm = FCFS;
 
@@ -117,7 +99,7 @@ public class PlanificadorCPU {
     public PlanificadorCPU(String path) {
         loadProcess(path);
         this.allProcess = new ArrayList<>(workQueue);
-        
+
     }
 
     private void loadProcess(String path) {
@@ -145,10 +127,10 @@ public class PlanificadorCPU {
             }
         }
     }
-    
+
     /**
      * Utilice el planificador apropiado para elegir el siguiente proceso. A
-     * continuaci�n, enviaremos el proceso.
+     * continuacion, enviaremos el proceso.
      */
     private void planner() {
         switch (this.algorithm) {
@@ -203,8 +185,8 @@ public class PlanificadorCPU {
 
     private void RunRoundRobin(ArrayList readyQ) {
         try {
-            if(this.occupiedTime == 0){
-                this.activeProcess = (PCB)readyQ.get(0);
+            if (this.occupiedTime == 0) {
+                this.activeProcess = (PCB) readyQ.get(0);
             }
             if (this.activeProcess.isFinished() || quantumCounter == 0) {
                 this.activeProcess = nextProcessRR(readyQ);
@@ -269,7 +251,6 @@ public class PlanificadorCPU {
             p = (PCB) workQueue.get(i);
             if (p.getArrivalTime() == this.currentTime) {
                 this.readyQueue.add(p);
-                this.processesIn++;
                 this.preemptive = true;
             }
         }
@@ -282,7 +263,6 @@ public class PlanificadorCPU {
             p = (PCB) this.readyQueue.get(i);
             if (p.isFinished() == true) {
                 this.readyQueue.remove(i);
-                this.processesOut++;
             }
         }
     }
@@ -358,7 +338,7 @@ public class PlanificadorCPU {
         purgeWorkQueue();
         purgeReadyQueue();
     }
-    
+
     public int getFps() {
         return fps;
     }
@@ -374,19 +354,19 @@ public class PlanificadorCPU {
     public void setPaused(Boolean paused) {
         this.paused = paused;
     }
-    
+
     public void restart() {
         activeProcess = null;
         currentTime = 0;
         occupiedTime = 0;
         quantum = 4;
         quantumCounter = quantum;
-        turnCounter = 0;
-        processesIn = 0;
-        processesOut = 0;
         workQueue.clear();
         readyQueue.clear();
-        loadProcess("/home/junior/Documentos/process.txt");
+        loadProcess("processes.txt");
     }
-    
+
+    public void addProcess(PCB p){
+        this.workQueue.add(p);
+    }
 }
