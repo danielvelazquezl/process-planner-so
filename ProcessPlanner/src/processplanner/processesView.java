@@ -60,9 +60,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         comboBoxAlgorithms = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        messages = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         cpuTime = new javax.swing.JLabel();
         stop = new javax.swing.JButton();
@@ -117,25 +117,21 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel3.setText("Algoritmo a utilizar");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, -1, -1));
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jTextArea2.setRows(5);
-        jTextArea2.setText("no se si fue una lagrima, quien mas va sacarte a bailar lentos, en el living de su de esos las 10");
-        jScrollPane3.setViewportView(jTextArea2);
+        messages.setColumns(20);
+        messages.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        messages.setRows(5);
+        jScrollPane3.setViewportView(messages);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 150, 395, 230));
 
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "Nombre", "Ráfagas", "T. Llegada"
+                "Proceso", "Ráfagas", "T. Llegada"
             }
         ) {
             Class[] types = new Class [] {
@@ -153,7 +149,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable2);
+        jScrollPane4.setViewportView(table);
 
         getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 380, 230));
 
@@ -230,12 +226,12 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea messages;
     private javax.swing.JTextField processName;
     private javax.swing.JButton restart;
     private javax.swing.JButton run;
     private javax.swing.JButton stop;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -260,21 +256,19 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         } // Algoritmos a escojer
         else if (ae.getSource() == comboBoxAlgorithms) {
             if ("FCFS".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                System.out.println("FCFS");
                 cpu.setAlgorithm(PlanificadorCPU.FCFS);
             }
             if ("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                System.out.println("SJF");
                 cpu.setAlgorithm(PlanificadorCPU.SJF);
             }
             if ("RR".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                System.out.println("RR");
                 cpu.setAlgorithm(PlanificadorCPU.ROUNDROBIN);
             }
         } //reiniciar procesos
         else if (ae.getSource() == restart) {
             cpu.restart();
             updateUiStatus();
+            messages.setText("");
             repaint();
         }
 
@@ -299,10 +293,19 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private void updateUiStatus() { //reloj
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
         if (cpu.getActiveProcess() != null) {
-            System.out.print("En tiempo = " + cpu.getCurrentTime() + "->");
-            System.out.println(cpu.getActiveProcess().getpName());
+            updateMessages();
+            updateTable();
         }
+    }
+    
+    private void updateMessages() {
+        messages.append("Tiempo: " + cpu.getCurrentTime() + " => " + 
+                cpu.getActiveProcess().getpName() + " en ejecucion\n");
 
+    }
+    
+    private void updateTable() {
+        
     }
 
 }
