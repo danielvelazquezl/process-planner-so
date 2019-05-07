@@ -6,7 +6,6 @@ public class PCB {
     private long startTime, finishedTime, tWatingTotal;
     private String pName;
     private boolean arrived = false;
-    private boolean started = false;
     private boolean finished = false;
     private boolean active = false;
 
@@ -27,7 +26,7 @@ public class PCB {
         }
 
         if (tBurst == tInitBurst) {
-            this.started = true;
+            //this.started = true;
             this.startTime = currentTime;
 
         }
@@ -39,11 +38,14 @@ public class PCB {
     }
 
     public synchronized void waiting(long currentTime) {
-        this.active = false;
-        this.tWatingTotal++;
         if (currentTime == this.arrivalTime) {
             this.arrived = true;
         }
+        if(this.arrived == true){
+            this.tWatingTotal++;
+        }
+        this.active = false;
+        
     }
 
     public void restore() {
@@ -52,7 +54,7 @@ public class PCB {
         this.tWatingTotal = 0;
         this.finishedTime = 0;
         this.active = false;
-        this.started = false;
+        //this.started = false;
         this.finished = false;
         this.arrived = false;
     }
@@ -89,29 +91,12 @@ public class PCB {
         return this.arrived;
     }
 
-    public boolean isStarted() {
-        return this.started;
-    }
-
     public boolean isFinished() {
         return this.finished;
     }
 
     public boolean isActive() {
         return this.active;
-    }
-
-    public void print() {
-        System.out.println("PID: " + this.pid + "\nTiempo Burst: " + this.tBurst
-                + "Tiempo inicial Burst  : " + this.tInitBurst + "\n"
-                + "Tiempo LLegada : " + this.arrivalTime + "\n"
-                + "Tiempo Inicio   : " + this.startTime + "\n"
-                + "Tiempo Final  : " + this.finishedTime + "\n"
-                + "Tiempo Espera    : " + this.tWatingTotal);
-    }
-
-    public void decreaseBurstTime() {
-        this.tBurst--;
     }
 
     public String getpName() {
