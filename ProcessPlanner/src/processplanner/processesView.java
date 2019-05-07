@@ -302,7 +302,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             repaint();
         }//Agregar proceso
         else if (ae.getSource() == addProcess) {
-            cpu.addProcess(new PCB(Integer.parseInt(pID.getText()), processName.getText(),
+            cpu.addProcess(new PCB(processName.getText(),
                     Integer.parseInt(burstAmount.getText()), (int) cpu.getCurrentTime())
             );
         }

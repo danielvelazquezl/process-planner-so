@@ -111,7 +111,7 @@ public class PlanificadorCPU {
             br = new BufferedReader(new FileReader(path));
             while ((line = br.readLine()) != null) {
                 String[] process = line.split(cvsSplitBy);
-                this.workQueue.add(new PCB(Integer.parseInt(process[0]), process[1], Integer.parseInt(process[2]), Integer.parseInt(process[3])));
+                this.workQueue.add(new PCB(process[0], Integer.parseInt(process[1]), Integer.parseInt(process[2])));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -176,6 +176,7 @@ public class PlanificadorCPU {
     }
 
     private void runRoundRobin(ArrayList readyQ) {
+
         try {
             if (this.occupiedTime == 0) {
                 this.activeProcess = (PCB) readyQ.get(0);
@@ -190,7 +191,7 @@ public class PlanificadorCPU {
         }
     }
 
-    private PCB nextProcessRR(ArrayList readyQ) {
+   private PCB nextProcessRR(ArrayList readyQ) {
         PCB nextP = null;
         int index = 0;
 
@@ -207,6 +208,7 @@ public class PlanificadorCPU {
         return nextP;
     }
 
+
     private void runMultiQueue(ArrayList readyQ) {
         ArrayList<PCB> maxQueue = new ArrayList<>();
         readyQ.forEach((PCB p) -> {
@@ -215,6 +217,7 @@ public class PlanificadorCPU {
                 readyQ.remove(p);
             }
         });
+
         if (!readyQ.isEmpty()) {
             runRoundRobin(readyQ);
         } else if (readyQ.isEmpty() && !maxQueue.isEmpty()) {
