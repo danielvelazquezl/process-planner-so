@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 // </editor-fold>    
 
 /**
@@ -135,7 +136,8 @@ public class PlanificadorCPU {
     private void planner() {
         switch (this.algorithm) {
             case FCFS:
-                RunFCFS(this.readyQueue);
+                //RunFCFS(this.readyQueue);
+                runFIFO(this.readyQueue);
                 break;
             case SJF:
                 RunSJF(this.readyQueue);
@@ -161,12 +163,12 @@ public class PlanificadorCPU {
                 p.waiting(this.currentTime);
             }
         }
-        
-        if( this.activeProcess.isFinished()){
-            finishedCount++;
-        }
-        
-        
+    }
+    
+    public void runFIFO(ArrayList readyQ){
+        Collections.sort(readyQ, (PCB p1, PCB p2) -> 
+            new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
+        this.activeProcess = (PCB)readyQ.get(0);
     }
 
     private void RunFCFS(ArrayList readyQ) {
@@ -260,6 +262,7 @@ public class PlanificadorCPU {
                 this.preemptive = true;
             }
         }
+
     }
 
     private void purgeReadyQueue() {
@@ -268,9 +271,9 @@ public class PlanificadorCPU {
             p = (PCB) this.readyQueue.get(i);
             if (p.isFinished() == true) {
                 this.readyQueue.remove(i);
+                finishedCount++;
             }
         }
-        this.readyQueue.remove(activeProcess);
     }
 
     public long getCurrentTime() {
@@ -336,12 +339,11 @@ public class PlanificadorCPU {
             } else {
                 planner();
                 this.occupiedTime++;
-                //cleanUp();
+               cleanUp();
             }
             this.currentTime++;
         }
         calcAVGWait();
-        System.out.println(finishedCount);
         return moreCycles;
     }
 
@@ -366,6 +368,9 @@ public class PlanificadorCPU {
         this.paused = paused;
     }
 
+    /**
+     * reinicia el cpu
+     */
     public void restart() {
         activeProcess = null;
         finishedCount = 0;
