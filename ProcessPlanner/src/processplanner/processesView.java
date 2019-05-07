@@ -50,8 +50,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         processName = new javax.swing.JTextField();
         burstAmount = new javax.swing.JTextField();
         addProcess = new javax.swing.JButton();
@@ -73,19 +71,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         waitTime = new javax.swing.JLabel();
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Process Manager");
@@ -245,10 +230,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea messages;
     private javax.swing.JTextField pID;
     private javax.swing.JTextField processName;
@@ -323,6 +306,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     private void updateUiStatus() { //reloj
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
+        waitTime.setText(Double.toString((double) cpu.getAvgWait()));
         if (cpu.getActiveProcess() != null) {
             updateMessages();
             updateTable();
