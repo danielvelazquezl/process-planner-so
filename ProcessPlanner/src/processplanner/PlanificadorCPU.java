@@ -310,6 +310,10 @@ public class PlanificadorCPU {
     public void setAlgorithm(int algorithm) {
         this.algorithm = algorithm;
     }
+    
+    public ArrayList<PCB> getAllProcesses() {
+        return workQueue;
+    }
 
     public PCB getActiveProcess() {
         return activeProcess;

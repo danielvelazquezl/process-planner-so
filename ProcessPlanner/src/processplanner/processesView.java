@@ -21,6 +21,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
      */
     @SuppressWarnings("LeakingThisInConstructor")
     public processesView() {
+        loadTable();
         initComponents();
 
         int delay = (fps > 0) ? (1000 / fps) : 100;
@@ -30,7 +31,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         cpu = new PlanificadorCPU("processes.txt");
         cpu.setFps(delay);
-
+        
+        loadDataTable();
+        
         this.run.addActionListener(this);
         this.stop.addActionListener(this);
         this.comboBoxAlgorithms.addActionListener(this);
@@ -229,7 +232,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         if (ae.getSource() == run) {
             cpu.setPaused(false);
             pause = false;
-            loadTable();
             starSimulation();
         } //parar la ejecucion
         else if (ae.getSource() == stop) {
@@ -259,6 +261,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             cpu.restart();
             updateUiStatus();
             messages.setText("");
+            clearTable();
             repaint();
         }//Agregar proceso
         else if (ae.getSource() == addProcess) {
@@ -324,6 +327,16 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
                 return canEdit[columnIndex];
             }
         };
+    }
+    
+    private void loadDataTable() {
+        cpu.getAllProcesses().forEach((PCB p) -> {
+            dataTable.addRow(new Object [] {p.getpName(), p.getBurstTime(), p.getArrivalTime()});
+        });
+    }
+    
+    private void clearTable() {
+        for(int i = 0; i < dataTable.getRowCount(); i++) dataTable.removeRow(i);
     }
 
 }
