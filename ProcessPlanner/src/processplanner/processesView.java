@@ -131,11 +131,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Tiempo de CPU:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, -1, -1));
 
         cpuTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         cpuTime.setText("0");
-        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, -1, -1));
+        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 120, -1, -1));
 
         stop.setText("Parar");
         stop.setToolTipText("");
@@ -159,11 +159,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel7.setText("T. P. Espera:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 120, -1, -1));
 
         waitTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         waitTime.setText("0");
-        getContentPane().add(waitTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 120, -1, -1));
+        getContentPane().add(waitTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 120, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel8.setText("Cola de listos");
