@@ -360,6 +360,9 @@ public class PlanificadorCPU {
         this.paused = paused;
     }
 
+    /**
+     * reinicia el cpu
+     */
     public void restart() {
         activeProcess = null;
         finishedCount = 0;

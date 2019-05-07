@@ -77,6 +77,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jScrollPane1 = new javax.swing.JScrollPane();
         finished = new javax.swing.JTextArea();
         jLabel10 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Process Manager");
@@ -95,7 +97,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         run.setText("Iniciar");
         run.setToolTipText("");
-        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 70, -1));
+        getContentPane().add(run, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 30, 70, -1));
 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -137,7 +139,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         stop.setText("Parar");
         stop.setToolTipText("");
-        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 70, -1));
+        getContentPane().add(stop, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 30, 70, -1));
 
         jLabel5.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -146,7 +148,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         restart.setText("Reiniciar");
         restart.setToolTipText("");
-        getContentPane().add(restart, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, 90, -1));
+        getContentPane().add(restart, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 30, 90, -1));
 
         pID.setToolTipText("PID");
         getContentPane().add(pID, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 60, -1));
@@ -180,6 +182,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel10.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel10.setText("Procesos terminados");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 160, -1, -1));
+        getContentPane().add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 60, -1));
+
+        jLabel11.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel11.setText("Quantum");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -228,6 +235,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JTextArea finished;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -239,6 +247,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextArea messages;
     private javax.swing.JTextField pID;
     private javax.swing.JTextField processName;
