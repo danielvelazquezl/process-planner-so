@@ -161,6 +161,12 @@ public class PlanificadorCPU {
                 p.waiting(this.currentTime);
             }
         }
+        
+        if( this.activeProcess.isFinished()){
+            finishedCount++;
+        }
+        
+        
     }
 
     private void RunFCFS(ArrayList readyQ) {
@@ -254,7 +260,6 @@ public class PlanificadorCPU {
                 this.preemptive = true;
             }
         }
-
     }
 
     private void purgeReadyQueue() {
@@ -263,9 +268,9 @@ public class PlanificadorCPU {
             p = (PCB) this.readyQueue.get(i);
             if (p.isFinished() == true) {
                 this.readyQueue.remove(i);
-                finishedCount++;
             }
         }
+        this.readyQueue.remove(activeProcess);
     }
 
     public long getCurrentTime() {
@@ -331,11 +336,12 @@ public class PlanificadorCPU {
             } else {
                 planner();
                 this.occupiedTime++;
-                cleanUp();
+                //cleanUp();
             }
             this.currentTime++;
         }
         calcAVGWait();
+        System.out.println(finishedCount);
         return moreCycles;
     }
 
