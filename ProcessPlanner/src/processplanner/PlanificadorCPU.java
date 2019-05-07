@@ -96,6 +96,7 @@ public class PlanificadorCPU {
     private Boolean paused = false;
 
     private double avgWait = 0;
+    private int finishedCount = 0;
 // </editor-fold>    
 
     public PlanificadorCPU(String path) {
@@ -251,7 +252,7 @@ public class PlanificadorCPU {
         PCB p;
         for (int i = 0; i < this.workQueue.size(); i++) {
             p = (PCB) workQueue.get(i);
-            if (p.getArrivalTime() == this.currentTime) {
+            if (p.getArrivalTime() == this.currentTime && !p.isFinished()) {
                 this.readyQueue.add(p);
                 this.preemptive = true;
             }
@@ -265,6 +266,7 @@ public class PlanificadorCPU {
             p = (PCB) this.readyQueue.get(i);
             if (p.isFinished() == true) {
                 this.readyQueue.remove(i);
+                finishedCount++;
             }
         }
     }
@@ -326,7 +328,7 @@ public class PlanificadorCPU {
 
     public boolean nextCycle() {
         boolean moreCycles = false;
-        if (this.workQueue.isEmpty()) {
+        if (this.finishedCount == this.workQueue.size()) {
             moreCycles = false;
         } else {
             loadReadyQueue();
@@ -345,7 +347,7 @@ public class PlanificadorCPU {
     }
 
     private void cleanUp() {
-        purgeWorkQueue();
+        //purgeWorkQueue();
         purgeReadyQueue();
     }
 
@@ -367,10 +369,12 @@ public class PlanificadorCPU {
 
     public void restart() {
         activeProcess = null;
+        finishedCount = 0;
         currentTime = 0;
         occupiedTime = 0;
         quantum = 4;
         quantumCounter = quantum;
+        avgWait = 0.0;
         workQueue.clear();
         readyQueue.clear();
         loadProcess("processes.txt");
@@ -382,17 +386,17 @@ public class PlanificadorCPU {
 
     private void calcAVGWait() {
         PCB p = null;
-        int finishedCount = 0;
         int allWaited=0;
-        for (int i = 0; i < allProcesses.size(); i++) {
-            p = (PCB) allProcesses.get(i);
+        for (int i = 0; i < workQueue.size(); i++) {
+            p = (PCB) workQueue.get(i);
 
             if (p.isFinished()) {
-                finishedCount++;
+               // finishedCount++;
                 int waited = (int) p.gettWatingTotal();
                 allWaited += waited;
             }
         }
+        System.out.println(allWaited);
         if(finishedCount >0){
             this.avgWait = (double) allWaited / (double) finishedCount;
         }

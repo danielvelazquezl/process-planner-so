@@ -291,6 +291,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private void updateUiStatus() { //reloj
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
         waitTime.setText(Double.toString((double) cpu.getAvgWait()));
+
         if (cpu.getActiveProcess() != null) {
             updateMessages();
         }
