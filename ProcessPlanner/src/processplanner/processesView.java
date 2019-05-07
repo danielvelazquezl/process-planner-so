@@ -72,10 +72,15 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         waitTime = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        finished = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Process Manager");
-        setPreferredSize(new java.awt.Dimension(804, 489));
+        setPreferredSize(new java.awt.Dimension(920, 489));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -109,19 +114,18 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, -1, -1));
 
         messages.setEditable(false);
-        messages.setColumns(20);
         messages.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         messages.setRows(5);
         jScrollPane3.setViewportView(messages);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 150, 395, 230));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 180, 330, 230));
 
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         table.setModel(dataTable);
         jScrollPane4.setViewportView(table);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 380, 230));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 350, 230));
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Tiempo de CPU:");
@@ -158,6 +162,24 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         waitTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         waitTime.setText("0");
         getContentPane().add(waitTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 120, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel8.setText("Cola de listos");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel9.setText("Atendidos por el procesador");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 160, -1, -1));
+
+        finished.setEditable(false);
+        finished.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jScrollPane1.setViewportView(finished);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 180, 200, 230));
+
+        jLabel10.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel10.setText("Procesos terminados");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 160, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -203,13 +225,18 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JTextField burstAmount;
     private javax.swing.JComboBox<String> comboBoxAlgorithms;
     private javax.swing.JLabel cpuTime;
+    private javax.swing.JTextArea finished;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextArea messages;
@@ -259,6 +286,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             cpu.restart();
             updateUiStatus();
             messages.setText("");
+            finished.setText("");
             clearTable();
             repaint();
         }//Agregar proceso
@@ -292,6 +320,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         if (cpu.getActiveProcess() != null) {
             updateMessages();
+            updateFinished();
         }
         updateTable();
     }
@@ -339,6 +368,10 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private void clearTable() {
         dataTable.getDataVector().removeAllElements();
         dataTable.fireTableDataChanged();
+    }
+    
+    private void updateFinished() {
+        if (cpu.getActiveProcess().isFinished()) finished.append(cpu.getActiveProcess().getpName() + "\n");
     }
 
 }
