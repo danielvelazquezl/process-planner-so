@@ -50,8 +50,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         processName = new javax.swing.JTextField();
         burstAmount = new javax.swing.JTextField();
         addProcess = new javax.swing.JButton();
@@ -73,19 +71,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         waitTime = new javax.swing.JLabel();
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Process Manager");
@@ -132,29 +117,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Proceso", "Ráfagas", "T. Llegada"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        table.setModel(dataTable);
         jScrollPane4.setViewportView(table);
 
         getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 380, 230));
@@ -246,10 +209,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea messages;
     private javax.swing.JTextField pID;
     private javax.swing.JTextField processName;
@@ -259,14 +220,16 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JTable table;
     private javax.swing.JLabel waitTime;
     // End of variables declaration//GEN-END:variables
+    private javax.swing.table.DefaultTableModel dataTable;
 // </editor-fold>  
-    
+
     @Override
     public void actionPerformed(ActionEvent ae) {
         //ejecutar
         if (ae.getSource() == run) {
             cpu.setPaused(false);
             pause = false;
+            loadTable();
             starSimulation();
         } //parar la ejecucion
         else if (ae.getSource() == stop) {
@@ -298,9 +261,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             messages.setText("");
             repaint();
         }//Agregar proceso
-        else if(ae.getSource() == addProcess){
-            cpu.addProcess(new PCB(Integer.parseInt(pID.getText()), processName.getText(), 
-                    Integer.parseInt(burstAmount.getText()), (int )cpu.getCurrentTime())
+        else if (ae.getSource() == addProcess) {
+            cpu.addProcess(new PCB(Integer.parseInt(pID.getText()), processName.getText(),
+                    Integer.parseInt(burstAmount.getText()), (int) cpu.getCurrentTime())
             );
         }
 
@@ -326,18 +289,40 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
         if (cpu.getActiveProcess() != null) {
             updateMessages();
-            updateTable();
         }
     }
-    
+
     private void updateMessages() {
-        messages.append("Tiempo: " + cpu.getCurrentTime() + " => " + 
-                cpu.getActiveProcess().getpName() + " en ejecucion\n");
+        messages.append("Tiempo: " + cpu.getCurrentTime() + " => "
+                + cpu.getActiveProcess().getpName() + " en ejecucion\n");
+    }
+
+    private void updateTable() {
 
     }
-    
-    private void updateTable() {
-        
+
+    private void loadTable() {
+        dataTable = new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Proceso", "Ráfagas", "T. Llegada"
+                }
+        ) {
+            Class[] types = new Class[]{
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean[]{
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
     }
 
 }
