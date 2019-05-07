@@ -136,11 +136,10 @@ public class PlanificadorCPU {
     private void planner() {
         switch (this.algorithm) {
             case FCFS:
-                //RunFCFS(this.readyQueue);
-                runFIFO(this.readyQueue);
+                runFCFS(this.readyQueue);
                 break;
             case SJF:
-                RunSJF(this.readyQueue);
+                runSJF(this.readyQueue);
                 break;
             case ROUNDROBIN:
                 RunRoundRobin(this.readyQueue);
@@ -165,20 +164,16 @@ public class PlanificadorCPU {
         }
     }
     
-    public void runFIFO(ArrayList readyQ){
+    public void runFCFS(ArrayList readyQ){
         Collections.sort(readyQ, (PCB p1, PCB p2) -> 
             new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
         this.activeProcess = (PCB)readyQ.get(0);
     }
-
-    private void RunFCFS(ArrayList readyQ) {
-        try {
-            if (this.occupiedTime == 0 || this.activeProcess.isFinished()) {
-                this.activeProcess = nextProcessArriveFirst(readyQ);
-                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
-            }
-        } catch (NullPointerException e) {
-        }
+    
+    public void runSJF(ArrayList readyQ){
+        Collections.sort(readyQ, (PCB p1, PCB p2) -> 
+            new Integer(p1.getBurstTime()).compareTo(new Integer(p2.getBurstTime())));
+        this.activeProcess = (PCB)readyQ.get(0);
     }
 
     private void RunSJF(ArrayList readyQ) {
@@ -265,7 +260,7 @@ public class PlanificadorCPU {
 
     }
 
-    private void purgeReadyQueue() {
+    private void cleanReadyQueue() {
         PCB p;
         for (int i = 0; i < this.readyQueue.size(); i++) {
             p = (PCB) this.readyQueue.get(i);
@@ -339,17 +334,12 @@ public class PlanificadorCPU {
             } else {
                 planner();
                 this.occupiedTime++;
-               cleanUp();
+               cleanReadyQueue();
             }
             this.currentTime++;
         }
         calcAVGWait();
         return moreCycles;
-    }
-
-    private void cleanUp() {
-        //purgeWorkQueue();
-        purgeReadyQueue();
     }
 
     public int getFps() {
