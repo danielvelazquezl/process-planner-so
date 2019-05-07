@@ -120,6 +120,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel3.setText("Algoritmo a utilizar");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, -1, -1));
 
+        messages.setEditable(false);
         messages.setColumns(20);
         messages.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         messages.setRows(5);
