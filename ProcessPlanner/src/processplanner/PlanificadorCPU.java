@@ -5,7 +5,6 @@
  */
 package processplanner;
 // <editor-fold defaultstate="collapsed" desc="Imports">
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -221,21 +220,6 @@ public class PlanificadorCPU {
         } else if (readyQ.isEmpty() && !maxQueue.isEmpty()) {
             runFCFS(maxQueue);
         }
-    }
-
-    private PCB nextProcessShortest(ArrayList readyQ) {
-        PCB nextP = null, shortest = null;
-        long time = 0, shortTime = 0;
-
-        for (int i = 0; i < readyQ.size(); ++i) {
-            nextP = (PCB) readyQ.get(i);
-            time = nextP.getBurstTime();
-            if ((time < shortTime) || (i == 0)) {
-                shortTime = time;
-                shortest = nextP;
-            }
-        }
-        return shortest;
     }
 
     private void loadReadyQueue() {
