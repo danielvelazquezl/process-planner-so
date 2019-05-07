@@ -71,7 +71,7 @@ public class PlanificadorCPU {
      * Coleccion de todos los procesos que seran usados
      */
     private ArrayList<PCB> workQueue = new ArrayList<>();
-    private ArrayList<PCB> allProcess;
+    private ArrayList<PCB> allProcesses;
 
     /**
      * Coleccion de todos los procesos que han llegado y requieren CPU
@@ -94,11 +94,13 @@ public class PlanificadorCPU {
      * Flag para verificar si fue pausada la ejecucion
      */
     private Boolean paused = false;
+
+    private double avgWait = 0;
 // </editor-fold>    
 
     public PlanificadorCPU(String path) {
         loadProcess(path);
-        this.allProcess = new ArrayList<>(workQueue);
+        this.allProcesses = new ArrayList<>(workQueue);
 
     }
 
@@ -281,6 +283,10 @@ public class PlanificadorCPU {
         return currentTime;
     }
 
+    public double getAvgWait() {
+        return avgWait;
+    }
+    
     public long getInactivityTime() {
         return inactivityTime;
     }
@@ -330,7 +336,7 @@ public class PlanificadorCPU {
             }
             this.currentTime++;
         }
-        //recoleccionEstadisticas();
+        calcAVGWait();
         return moreCycles;
     }
 
@@ -366,7 +372,25 @@ public class PlanificadorCPU {
         loadProcess("processes.txt");
     }
 
-    public void addProcess(PCB p){
+    public void addProcess(PCB p) {
         this.workQueue.add(p);
+    }
+
+    private void calcAVGWait() {
+        PCB p = null;
+        int finishedCount = 0;
+        int allWaited=0;
+        for (int i = 0; i < allProcesses.size(); i++) {
+            p = (PCB) allProcesses.get(i);
+
+            if (p.isFinished()) {
+                finishedCount++;
+                int waited = (int) p.gettWatingTotal();
+                allWaited += waited;
+            }
+        }
+        if(finishedCount >0){
+            this.avgWait = (double) allWaited / (double) finishedCount;
+        }
     }
 }
