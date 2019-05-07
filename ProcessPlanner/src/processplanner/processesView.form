@@ -101,11 +101,10 @@
     <Component class="javax.swing.JComboBox" name="comboBoxAlgorithms">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
+          <StringArray count="3">
             <StringItem index="0" value="FCFS"/>
             <StringItem index="1" value="SJF"/>
-            <StringItem index="2" value="RR"/>
-            <StringItem index="3" value="Colas multinivel"/>
+            <StringItem index="2" value="Colas multinivel"/>
           </StringArray>
         </Property>
       </Properties>
@@ -351,9 +350,14 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JSpinner" name="jSpinner1">
+      <Properties>
+        <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="4" type="code"/>
+        </Property>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="170" y="30" width="60" height="-1"/>
+          <AbsoluteConstraints x="170" y="34" width="60" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -366,7 +370,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="170" y="10" width="-1" height="-1"/>
+          <AbsoluteConstraints x="170" y="12" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
