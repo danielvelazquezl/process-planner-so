@@ -71,7 +71,6 @@ public class PlanificadorCPU {
      * Coleccion de todos los procesos que seran usados
      */
     private ArrayList<PCB> workQueue = new ArrayList<>();
-    private ArrayList<PCB> allProcesses;
 
     /**
      * Coleccion de todos los procesos que han llegado y requieren CPU
@@ -101,8 +100,6 @@ public class PlanificadorCPU {
 
     public PlanificadorCPU(String path) {
         loadProcess(path);
-        this.allProcesses = new ArrayList<>(workQueue);
-
     }
 
     private void loadProcess(String path) {
@@ -271,16 +268,6 @@ public class PlanificadorCPU {
         }
     }
 
-    private void purgeWorkQueue() {
-        PCB p;
-        for (int i = 0; i < this.workQueue.size(); i++) {
-            p = (PCB) this.workQueue.get(i);
-            if (p.isFinished() == true) {
-                this.workQueue.remove(i);
-            }
-        }
-    }
-
     public long getCurrentTime() {
         return currentTime;
     }
@@ -312,11 +299,17 @@ public class PlanificadorCPU {
     public void setAlgorithm(int algorithm) {
         this.algorithm = algorithm;
     }
-    
-    public ArrayList<PCB> getAllProcesses() {
+
+    public ArrayList<PCB> getWorkQueue() {
         return workQueue;
     }
-
+    
+    public ArrayList<PCB> getReadyQueue() {
+        return readyQueue;
+    }
+    
+    
+    
     public PCB getActiveProcess() {
         return activeProcess;
     }
@@ -396,7 +389,6 @@ public class PlanificadorCPU {
                 allWaited += waited;
             }
         }
-        System.out.println(allWaited);
         if(finishedCount >0){
             this.avgWait = (double) allWaited / (double) finishedCount;
         }

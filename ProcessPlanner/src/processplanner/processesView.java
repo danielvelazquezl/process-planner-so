@@ -31,9 +31,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         cpu = new PlanificadorCPU("processes.txt");
         cpu.setFps(delay);
-        
-        loadDataTable();
-        
+
         this.run.addActionListener(this);
         this.stop.addActionListener(this);
         this.comboBoxAlgorithms.addActionListener(this);
@@ -295,6 +293,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         if (cpu.getActiveProcess() != null) {
             updateMessages();
         }
+        updateTable();
     }
 
     private void updateMessages() {
@@ -303,7 +302,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     }
 
     private void updateTable() {
-
+        clearTable();
+        loadDataTable();
     }
 
     private void loadTable() {
@@ -329,15 +329,16 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             }
         };
     }
-    
+
     private void loadDataTable() {
-        cpu.getAllProcesses().forEach((PCB p) -> {
-            dataTable.addRow(new Object [] {p.getpName(), p.getBurstTime(), p.getArrivalTime()});
+        cpu.getReadyQueue().forEach((PCB p) -> {
+            dataTable.addRow(new Object[]{p.getpName(), p.getBurstTime(), p.getArrivalTime()});
         });
     }
-    
+
     private void clearTable() {
-        for(int i = 0; i < dataTable.getRowCount(); i++) dataTable.removeRow(i);
+        dataTable.getDataVector().removeAllElements();
+        dataTable.fireTableDataChanged();
     }
 
 }
