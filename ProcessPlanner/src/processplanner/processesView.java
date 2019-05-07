@@ -108,7 +108,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel2.setText("Cantidad de ráfagas");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, -1, -1));
 
-        comboBoxAlgorithms.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "RR", "Colas multinivel" }));
+        comboBoxAlgorithms.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "Colas multinivel" }));
         getContentPane().add(comboBoxAlgorithms, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 34, 140, -1));
 
         jLabel3.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
@@ -131,11 +131,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Tiempo de CPU:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 120, -1, -1));
 
         cpuTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         cpuTime.setText("0");
-        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, -1, -1));
+        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 120, -1, -1));
 
         stop.setText("Parar");
         stop.setToolTipText("");
@@ -159,11 +159,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel7.setText("T. P. Espera:");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 120, -1, -1));
 
         waitTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         waitTime.setText("0");
-        getContentPane().add(waitTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 120, -1, -1));
+        getContentPane().add(waitTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 120, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel8.setText("Cola de listos");
@@ -182,11 +182,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel10.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel10.setText("Procesos terminados");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 160, -1, -1));
-        getContentPane().add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 60, -1));
+
+        jSpinner1.setValue(4);
+        getContentPane().add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 34, 60, -1));
 
         jLabel11.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel11.setText("Quantum");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 12, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -287,8 +289,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             if ("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
                 cpu.setAlgorithm(PlanificadorCPU.SJF);
             }
-            if ("RR".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                cpu.setAlgorithm(PlanificadorCPU.ROUNDROBIN);
+            if ("Colas multinivel".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
+                cpu.setAlgorithm(PlanificadorCPU.MULTIQUEUE);
             }
         } //reiniciar procesos
         else if (ae.getSource() == restart) {
@@ -300,7 +302,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             repaint();
         }//Agregar proceso
         else if (ae.getSource() == addProcess) {
-            cpu.addProcess(new PCB(Integer.parseInt(pID.getText()), processName.getText(),
+            cpu.addProcess(new PCB(processName.getText(),
                     Integer.parseInt(burstAmount.getText()), (int) cpu.getCurrentTime())
             );
         }

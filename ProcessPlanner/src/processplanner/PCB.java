@@ -8,9 +8,10 @@ public class PCB {
     private boolean arrived = false;
     private boolean finished = false;
     private boolean active = false;
+    public static int nextPID = 0;
 
-    public PCB(int pid, String pName, int burstTime, int arrivalTime) {
-        this.pid = pid;
+    public PCB(String pName, int burstTime, int arrivalTime) {
+        this.pid = PCB.nextPID++;
         this.pName = pName;
         this.tBurst = burstTime;
         this.tInitBurst = burstTime;

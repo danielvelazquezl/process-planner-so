@@ -26,7 +26,7 @@ public class PlanificadorCPU {
      */
     public static final int FCFS = 1;
     public static final int SJF = 2;
-    public static final int ROUNDROBIN = 3;
+    public static final int MULTIQUEUE = 3;
 
     /**
      * Tiempo transcurrido
@@ -112,7 +112,7 @@ public class PlanificadorCPU {
             br = new BufferedReader(new FileReader(path));
             while ((line = br.readLine()) != null) {
                 String[] process = line.split(cvsSplitBy);
-                this.workQueue.add(new PCB(Integer.parseInt(process[0]), process[1], Integer.parseInt(process[2]), Integer.parseInt(process[3])));
+                this.workQueue.add(new PCB(process[0], Integer.parseInt(process[1]), Integer.parseInt(process[2])));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -141,8 +141,8 @@ public class PlanificadorCPU {
             case SJF:
                 runSJF(this.readyQueue);
                 break;
-            case ROUNDROBIN:
-                RunRoundRobin(this.readyQueue);
+            case MULTIQUEUE:
+                runMultiQueue(this.readyQueue);
                 break;
             default:
                 System.out.println("Ningun algoritmo de planificacion valido");
@@ -163,21 +163,21 @@ public class PlanificadorCPU {
             }
         }
     }
-    
-    public void runFCFS(ArrayList readyQ){
-        Collections.sort(readyQ, (PCB p1, PCB p2) -> 
-            new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
-        this.activeProcess = (PCB)readyQ.get(0);
-    }
-    
-    public void runSJF(ArrayList readyQ){
-        Collections.sort(readyQ, (PCB p1, PCB p2) -> 
-            new Integer(p1.getBurstTime()).compareTo(new Integer(p2.getBurstTime())));
-        this.activeProcess = (PCB)readyQ.get(0);
+
+    public void runFCFS(ArrayList readyQ) {
+        Collections.sort(readyQ, (PCB p1, PCB p2)
+                -> new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
+        this.activeProcess = (PCB) readyQ.get(0);
     }
 
-    
-    private void RunRoundRobin(ArrayList readyQ) {
+    public void runSJF(ArrayList readyQ) {
+        Collections.sort(readyQ, (PCB p1, PCB p2)
+                -> new Integer(p1.getBurstTime()).compareTo(new Integer(p2.getBurstTime())));
+        this.activeProcess = (PCB) readyQ.get(0);
+    }
+
+    private void runRoundRobin(ArrayList readyQ) {
+
         try {
             if (this.occupiedTime == 0) {
                 this.activeProcess = (PCB) readyQ.get(0);
@@ -192,7 +192,7 @@ public class PlanificadorCPU {
         }
     }
 
-    private PCB nextProcessRR(ArrayList readyQ) {
+   private PCB nextProcessRR(ArrayList readyQ) {
         PCB nextP = null;
         int index = 0;
 
@@ -207,6 +207,23 @@ public class PlanificadorCPU {
         nextP = (PCB) readyQ.get(index);
 
         return nextP;
+    }
+
+
+    private void runMultiQueue(ArrayList readyQ) {
+        ArrayList<PCB> maxQueue = new ArrayList<>();
+        readyQ.forEach((PCB p) -> {
+            if (p.getBurstTime() >= 10) {
+                maxQueue.add(p);
+                readyQ.remove(p);
+            }
+        });
+
+        if (!readyQ.isEmpty()) {
+            runRoundRobin(readyQ);
+        } else if (readyQ.isEmpty() && !maxQueue.isEmpty()) {
+            runFCFS(maxQueue);
+        }
     }
 
     private void loadReadyQueue() {
@@ -239,7 +256,7 @@ public class PlanificadorCPU {
     public double getAvgWait() {
         return avgWait;
     }
-    
+
     public long getInactivityTime() {
         return inactivityTime;
     }
@@ -267,13 +284,11 @@ public class PlanificadorCPU {
     public ArrayList<PCB> getWorkQueue() {
         return workQueue;
     }
-    
+
     public ArrayList<PCB> getReadyQueue() {
         return readyQueue;
     }
-    
-    
-    
+
     public PCB getActiveProcess() {
         return activeProcess;
     }
@@ -295,7 +310,7 @@ public class PlanificadorCPU {
             } else {
                 planner();
                 this.occupiedTime++;
-               cleanReadyQueue();
+                cleanReadyQueue();
             }
             this.currentTime++;
         }
@@ -341,17 +356,17 @@ public class PlanificadorCPU {
 
     private void calcAVGWait() {
         PCB p = null;
-        int allWaited=0;
+        int allWaited = 0;
         for (int i = 0; i < workQueue.size(); i++) {
             p = (PCB) workQueue.get(i);
 
             if (p.isFinished()) {
-               // finishedCount++;
+                // finishedCount++;
                 int waited = (int) p.gettWatingTotal();
                 allWaited += waited;
             }
         }
-        if(finishedCount >0){
+        if (finishedCount > 0) {
             this.avgWait = (double) allWaited / (double) finishedCount;
         }
     }
