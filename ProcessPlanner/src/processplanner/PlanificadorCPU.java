@@ -176,16 +176,7 @@ public class PlanificadorCPU {
         this.activeProcess = (PCB)readyQ.get(0);
     }
 
-    private void RunSJF(ArrayList readyQ) {
-        try {
-            if (this.occupiedTime == 0 || this.activeProcess.isFinished() || this.preemptive == true) {
-                this.activeProcess = nextProcessShortest(readyQ);
-                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
-            }
-        } catch (NullPointerException e) {
-        }
-    }
-
+    
     private void RunRoundRobin(ArrayList readyQ) {
         try {
             if (this.occupiedTime == 0) {
@@ -216,36 +207,6 @@ public class PlanificadorCPU {
         nextP = (PCB) readyQ.get(index);
 
         return nextP;
-    }
-
-    private PCB nextProcessShortest(ArrayList readyQ) {
-        PCB nextP = null, shortest = null;
-        long time = 0, shortTime = 0;
-
-        for (int i = 0; i < readyQ.size(); ++i) {
-            nextP = (PCB) readyQ.get(i);
-            time = nextP.getBurstTime();
-            if ((time < shortTime) || (i == 0)) {
-                shortTime = time;
-                shortest = nextP;
-            }
-        }
-        return shortest;
-    }
-
-    private PCB nextProcessArriveFirst(ArrayList readyQ) {
-        PCB nextP = null, earliest = null;
-        long time = 0, arriveTime = 0;
-
-        for (int i = 0; i < readyQ.size(); ++i) {
-            nextP = (PCB) readyQ.get(i);
-            time = nextP.getArrivalTime();
-            if ((time < arriveTime) || (i == 0)) {
-                arriveTime = time;
-                earliest = nextP;
-            }
-        }
-        return earliest;
     }
 
     private void loadReadyQueue() {
