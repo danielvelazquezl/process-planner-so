@@ -71,6 +71,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         restart = new javax.swing.JButton();
         pID = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        waitTime = new javax.swing.JLabel();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -158,11 +160,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         jLabel4.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel4.setText("Tiempo de CPU:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, -1, -1));
 
         cpuTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         cpuTime.setText("0");
-        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 120, -1, -1));
+        getContentPane().add(cpuTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 100, -1, -1));
 
         stop.setText("Parar");
         stop.setToolTipText("");
@@ -183,6 +185,14 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel6.setText("PID");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel7.setText("T. P. Espera:");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 120, -1, -1));
+
+        waitTime.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        waitTime.setText("0");
+        getContentPane().add(waitTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 120, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -234,6 +244,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -245,6 +256,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JButton run;
     private javax.swing.JButton stop;
     private javax.swing.JTable table;
+    private javax.swing.JLabel waitTime;
     // End of variables declaration//GEN-END:variables
 // </editor-fold>  
     
