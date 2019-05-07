@@ -80,7 +80,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Process Manager");
-        setPreferredSize(new java.awt.Dimension(920, 489));
+        setPreferredSize(new java.awt.Dimension(920, 440));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
