@@ -288,6 +288,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         else if (ae.getSource() == restart) {
             cpu.restart();
             updateUiStatus();
+            cpuTime.setText("0");
             messages.setText("");
             finished.setText("");
             quantum.setValue((int) 4);
