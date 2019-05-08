@@ -311,7 +311,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    private synchronized void startSimulation() {
+    private  void startSimulation() {
         if (pause) {
             //No hace nada
         } else {
@@ -321,14 +321,14 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    private synchronized void stopSimulation() {
+    private  void stopSimulation() {
         if (temp.isRunning()) {
             temp.stop();
         }
     }
 
     private void updateUiStatus() {
-        cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
+        cpuTime.setText(Integer.toString(((int) cpu.getCurrentTime())-1));
         waitTime.setText(String.format("%.2f", cpu.getAvgWait()));
 
         updateMessages();

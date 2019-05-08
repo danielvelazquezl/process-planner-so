@@ -18,7 +18,7 @@ public class PCB {
         this.arrivalTime = arrivalTime;
     }
 
-    public synchronized void running(long currentTime) {
+    public void running(long currentTime) {
 
         this.active = true;
 
@@ -38,7 +38,7 @@ public class PCB {
         }
     }
 
-    public synchronized void waiting(long currentTime) {
+    public void waiting(long currentTime) {
         if (currentTime == this.arrivalTime) {
             this.arrived = true;
         }
