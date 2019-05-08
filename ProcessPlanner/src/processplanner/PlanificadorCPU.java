@@ -63,11 +63,6 @@ public class PlanificadorCPU {
     private int algorithm = FCFS;
 
     /**
-     * FPS Velocidad
-     */
-    private int fps = 0;
-
-    /**
      * Coleccion de todos los procesos que seran usados
      */
     private ArrayList<PCB> workQueue = new ArrayList<>();
@@ -315,14 +310,6 @@ public class PlanificadorCPU {
         }
         calcAVGWait();
         return moreCycles;
-    }
-
-    public int getFps() {
-        return fps;
-    }
-
-    public void setFps(int fps) {
-        this.fps = fps;
     }
 
     public Boolean isPaused() {
