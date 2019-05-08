@@ -51,7 +51,7 @@ public class PlanificadorCPU {
     /**
      * Algoritmo por defecto a utilizar
      */
-    private int algorithm = MULTIQUEUE;
+    private int algorithm = FCFS;
 
     /**
      * Coleccion de todos los procesos que seran usados
@@ -151,15 +151,15 @@ public class PlanificadorCPU {
      */
     private void dispatch() {
         PCB p = null;
-        this.activeProcess.running(this.currentTime);
-        for (int i = 0; i < this.readyQueue.size(); ++i) {
-            p = (PCB) this.readyQueue.get(i);
-            if (p.getPid() != this.activeProcess.getPid()) {
-                p.waiting(this.currentTime);
+        if (activeProcess != null) {
+            this.activeProcess.running(this.currentTime);
+            for (int i = 0; i < this.readyQueue.size(); ++i) {
+                p = (PCB) this.readyQueue.get(i);
+                if (p.getPid() != this.activeProcess.getPid()) {
+                    p.waiting(this.currentTime);
+                }
             }
-
         }
-
     }
 
     /**
@@ -180,35 +180,19 @@ public class PlanificadorCPU {
 
     private void runRoundRobin(ArrayList readyQ) {
 
-        try {
-            if (this.occupiedTime == 0) {
+        if (this.occupiedTime == 0 || activeProcess == null) {
+            this.activeProcess = (PCB) readyQ.get(0);
+        } else if (this.activeProcess.isFinished() || quantumCounter == 0) {
+            int pos = readyQ.indexOf(activeProcess);
+            if(pos >= (readyQ.size() - 1)){
                 this.activeProcess = (PCB) readyQ.get(0);
+            }else{
+                this.activeProcess = (PCB) readyQ.get(pos + 1);
             }
-            if (this.activeProcess.isFinished() || quantumCounter == 0) {
-                this.activeProcess = nextProcessRR(readyQ);
-                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
-                this.quantumCounter = quantum;
-            }
-            this.quantumCounter--;
-        } catch (NullPointerException e) {
+            
+            this.quantumCounter = quantum;
         }
-    }
-
-    private PCB nextProcessRR(ArrayList readyQ) {
-        PCB nextP = null;
-        int index = 0;
-
-        if (this.indexActiveProcess >= (readyQ.size() - 1)) {
-            index = 0;
-        } else if (this.activeProcess != null && this.activeProcess.isFinished()) {
-            index = this.indexActiveProcess;
-        } else {
-            index = (this.indexActiveProcess + 1);
-        }
-
-        nextP = (PCB) readyQ.get(index);
-
-        return nextP;
+        this.quantumCounter--;
     }
 
     private void runMultiQueue(ArrayList<PCB> readyQ) {
@@ -253,20 +237,12 @@ public class PlanificadorCPU {
                 finishedCount++;
             }
         }
-        if (this.algorithm == MULTIQUEUE) {
+        if (this.algorithm == MULTIQUEUE && activeProcess != null) {
             if (activeProcess.isFinished()) {
                 minQueue.remove(activeProcess);
                 maxQueue.remove(activeProcess);
             }
         }
-    }
-
-    public ArrayList<PCB> getWorkQueue() {
-        return workQueue;
-    }
-
-    public ArrayList<PCB> getReadyQueue() {
-        return readyQueue;
     }
 
     @SuppressWarnings("empty-statement")
@@ -283,6 +259,7 @@ public class PlanificadorCPU {
             moreCycles = true;
             if (this.readyQueue.isEmpty()) {
                 this.inactivityTime++;
+                activeProcess = null;
             } else {
                 planner();
                 this.occupiedTime++;
@@ -294,6 +271,9 @@ public class PlanificadorCPU {
         return moreCycles;
     }
 
+    /**
+     * reinicia el cpu
+     */
     public void restart() {
         activeProcess = null;
         finishedCount = 0;
@@ -346,13 +326,21 @@ public class PlanificadorCPU {
     public long getQuantum() {
         return quantum;
     }
-
-    public int getAlgorithm() {
-        return this.algorithm;
-    }
     
     public PCB getActiveProcess() {
         return activeProcess;
+    }
+    
+    public ArrayList<PCB> getWorkQueue() {
+        return workQueue;
+    }
+
+    public ArrayList<PCB> getReadyQueue() {
+        return readyQueue;
+    }
+
+    public int getAlgorithm() {
+        return this.algorithm;
     }
 
     public void setAlgorithm(int algorithm) {
