@@ -142,7 +142,7 @@ public class PlanificadorCPU {
                 runSJF(this.readyQueue);
                 break;
             case MULTIQUEUE:
-                runMultiQueue(this.readyQueue);
+              //  runMultiQueue(this.readyQueue);
                 break;
             default:
                 System.out.println("Ningun algoritmo de planificacion valido");
@@ -210,7 +210,7 @@ public class PlanificadorCPU {
     }
 
 
-    private void runMultiQueue(ArrayList readyQ) {
+    /*private void runMultiQueue(ArrayList readyQ) {
         ArrayList<PCB> maxQueue = new ArrayList<>();
         readyQ.forEach((PCB p) -> {
             if (p.getBurstTime() >= 10) {
@@ -224,7 +224,7 @@ public class PlanificadorCPU {
         } else if (readyQ.isEmpty() && !maxQueue.isEmpty()) {
             runFCFS(maxQueue);
         }
-    }
+    }*/
 
     private void loadReadyQueue() {
         PCB p;

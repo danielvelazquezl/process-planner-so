@@ -68,8 +68,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         stop = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         restart = new javax.swing.JButton();
-        pID = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         waitTime = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -87,13 +85,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         processName.setToolTipText("Nombre de proceso");
-        getContentPane().add(processName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 124, -1));
+        getContentPane().add(processName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 124, -1));
 
         burstAmount.setToolTipText("Cantidad de rafagas");
-        getContentPane().add(burstAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, 140, -1));
+        getContentPane().add(burstAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 140, -1));
 
         addProcess.setText("Agregar");
-        getContentPane().add(addProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 100, -1));
+        getContentPane().add(addProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 110, 100, -1));
 
         run.setText("Iniciar");
         run.setToolTipText("");
@@ -102,11 +100,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel1.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("Nombre de proceso");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
         jLabel2.setText("Cantidad de ráfagas");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 90, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 90, -1, -1));
 
         comboBoxAlgorithms.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SJF", "Colas multinivel" }));
         getContentPane().add(comboBoxAlgorithms, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 34, 140, -1));
@@ -149,13 +147,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         restart.setText("Reiniciar");
         restart.setToolTipText("");
         getContentPane().add(restart, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 30, 90, -1));
-
-        pID.setToolTipText("PID");
-        getContentPane().add(pID, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 60, -1));
-
-        jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
-        jLabel6.setText("PID");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel7.setText("T. P. Espera:");
@@ -242,7 +233,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -251,7 +241,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextArea messages;
-    private javax.swing.JTextField pID;
     private javax.swing.JTextField processName;
     private javax.swing.JButton restart;
     private javax.swing.JButton run;
@@ -268,7 +257,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         if (ae.getSource() == run) {
             cpu.setPaused(false);
             pause = false;
-            starSimulation();
+            startSimulation();
         } //parar la ejecucion
         else if (ae.getSource() == stop) {
             pause = true;
@@ -309,7 +298,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     }
 
-    private synchronized void starSimulation() {
+    private synchronized void startSimulation() {
         if (pause) {
 
         } else {
