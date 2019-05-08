@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package processplanner;
-// <editor-fold defaultstate="collapsed" desc="Imports">
 
+// <editor-fold defaultstate="collapsed" desc="Imports">
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,13 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 // </editor-fold>    
 
-/**
- *
- * @author junior
- */
 public class PlanificadorCPU {
 // <editor-fold defaultstate="collapsed" desc="Variables">
-
     /**
      * Constantes que especifican cada tipo de algoritmo
      */
@@ -95,10 +85,20 @@ public class PlanificadorCPU {
     private int finishedCount = 0;
 // </editor-fold>    
 
+    /**
+     * Constructor del planificador
+     * 
+     * @param path Direccion del archivo .txt de los procesos a ejecutar
+     */
     public PlanificadorCPU(String path) {
         loadProcess(path);
     }
 
+    /**
+     * Carga los procesos desde el .txt al workQueue
+     * 
+     * @param path Direccion del archivo .txt a leer
+     */
     private void loadProcess(String path) {
         BufferedReader br = null;
         String line = "";
@@ -126,8 +126,7 @@ public class PlanificadorCPU {
     }
 
     /**
-     * Utilice el planificador apropiado para elegir el siguiente proceso. A
-     * continuacion, enviaremos el proceso.
+     * Ejecuta el algoritmo seleccionado en la UI
      */
     private void planner() {
         switch (this.algorithm) {
@@ -147,9 +146,11 @@ public class PlanificadorCPU {
         dispatch();
     }
 
+    /**
+     * 
+     */
     private void dispatch() {
         PCB p = null;
-
         this.activeProcess.running(this.currentTime);
         for (int i = 0; i < this.readyQueue.size(); ++i) {
             p = (PCB) this.readyQueue.get(i);
@@ -161,6 +162,10 @@ public class PlanificadorCPU {
 
     }
 
+    /**
+     * 
+     * @param readyQ 
+     */
     public void runFCFS(ArrayList readyQ) {
         Collections.sort(readyQ, (PCB p1, PCB p2)
                 -> new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
@@ -256,48 +261,12 @@ public class PlanificadorCPU {
         }
     }
 
-    public long getCurrentTime() {
-        return currentTime;
-    }
-
-    public double getAvgWait() {
-        return avgWait;
-    }
-
-    public long getInactivityTime() {
-        return inactivityTime;
-    }
-
-    public long getOccupiedTime() {
-        return occupiedTime;
-    }
-
-    public long getQuantum() {
-        return quantum;
-    }
-
-    public void setQuantum(int quantum) {
-        this.quantum = quantum;
-    }
-
-    public int getAlgorithm() {
-        return this.algorithm;
-    }
-
-    public void setAlgorithm(int algorithm) {
-        this.algorithm = algorithm;
-    }
-
     public ArrayList<PCB> getWorkQueue() {
         return workQueue;
     }
 
     public ArrayList<PCB> getReadyQueue() {
         return readyQueue;
-    }
-
-    public PCB getActiveProcess() {
-        return activeProcess;
     }
 
     @SuppressWarnings("empty-statement")
@@ -314,7 +283,6 @@ public class PlanificadorCPU {
             moreCycles = true;
             if (this.readyQueue.isEmpty()) {
                 this.inactivityTime++;
-                //activeProcess = null;
             } else {
                 planner();
                 this.occupiedTime++;
@@ -326,17 +294,6 @@ public class PlanificadorCPU {
         return moreCycles;
     }
 
-    public Boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(Boolean paused) {
-        this.paused = paused;
-    }
-
-    /**
-     * reinicia el cpu
-     */
     public void restart() {
         activeProcess = null;
         finishedCount = 0;
@@ -361,7 +318,6 @@ public class PlanificadorCPU {
             p = (PCB) workQueue.get(i);
 
             if (p.isFinished()) {
-                // finishedCount++;
                 int waited = (int) p.gettWatingTotal();
                 allWaited += waited;
             }
@@ -369,5 +325,49 @@ public class PlanificadorCPU {
         if (finishedCount > 0) {
             this.avgWait = (double) allWaited / (double) finishedCount;
         }
+    }
+    
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    public double getAvgWait() {
+        return avgWait;
+    }
+
+    public long getInactivityTime() {
+        return inactivityTime;
+    }
+
+    public long getOccupiedTime() {
+        return occupiedTime;
+    }
+
+    public long getQuantum() {
+        return quantum;
+    }
+
+    public int getAlgorithm() {
+        return this.algorithm;
+    }
+    
+    public PCB getActiveProcess() {
+        return activeProcess;
+    }
+
+    public void setAlgorithm(int algorithm) {
+        this.algorithm = algorithm;
+    }
+    
+    public void setQuantum(int quantum) {
+        this.quantum = quantum;
+    }
+    
+    public void setPaused(Boolean paused) {
+        this.paused = paused;
+    }
+    
+    public Boolean isPaused() {
+        return paused;
     }
 }

@@ -4,14 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
-/**
- *
- * @author daniel
- */
 public class processesView extends javax.swing.JFrame implements ActionListener {
 
     PlanificadorCPU cpu;
-
     Timer temp;
     boolean pause = true;
 
