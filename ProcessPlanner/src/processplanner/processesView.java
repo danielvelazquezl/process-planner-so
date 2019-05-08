@@ -18,6 +18,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         loadTable();
         initComponents();
 
+        // inicializar el temporizador
         temp = new Timer(1000, this);
         temp.setCoalesce(false);
         temp.setInitialDelay(0);
@@ -29,9 +30,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         this.comboBoxAlgorithms.addActionListener(this);
         this.restart.addActionListener(this);
         this.addProcess.addActionListener(this);
-
-        //updateUiStatus();
-
     }
 
     /**
@@ -306,7 +304,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    private synchronized void startSimulation() {
+    private void startSimulation() {
         if (pause) {
             //No hace nada
         } else {
@@ -316,12 +314,16 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    private synchronized void stopSimulation() {
+    private void stopSimulation() {
         if (temp.isRunning()) {
             temp.stop();
         }
     }
 
+    /**
+     * Actualiza el estado de la tabla, los dos cuadros de mensajes 
+     * y los tiempos
+     */
     private void updateUiStatus() {
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
         waitTime.setText(String.format("%.2f", cpu.getAvgWait()));
@@ -333,6 +335,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         updateTable();
     }
 
+    /**
+     * Actualiza el cuadro de mensajes de procesos en ejecucion
+     */
     private void updateMessages() {
         if (cpu.getActiveProcess() == null) {
             messages.append("Tiempo: " + (cpu.getCurrentTime()-1) + " => ocioso\n");
@@ -343,11 +348,17 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     }
 
+    /**
+     * Actualiza los valores de la tabla
+     */
     private void updateTable() {
         clearTable();
         loadDataTable();
     }
 
+    /**
+     * Carga los valores por defecto de la tabla
+     */
     private void loadTable() {
         dataTable = new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
@@ -372,6 +383,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         };
     }
 
+    /**
+     * Carga los valores de los procesos de la cola de listos a la tabla
+     */
     private void loadDataTable() {
         cpu.getReadyQueue().forEach((PCB p) -> {
             if (!p.isActive()) {
@@ -385,6 +399,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         dataTable.fireTableDataChanged();
     }
 
+    /**
+     * Actualiza el cuadro de mensajes de los procesos que van terminando
+     */
     private void updateFinished() {
         if (cpu.getActiveProcess().isFinished()) {
             finished.append(cpu.getActiveProcess().getpName() + "\n");

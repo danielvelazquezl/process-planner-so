@@ -2,8 +2,8 @@ package processplanner;
 
 public class PCB {
 
-    private int pid, tBurst, tInitBurst, arrivalTime;
-    private long startTime, finishedTime, tWatingTotal;
+    private int pid, tBurst, arrivalTime;
+    private long tWatingTotal;
     private String pName;
     private boolean arrived = false;
     private boolean finished = false;
@@ -21,7 +21,6 @@ public class PCB {
         this.pid = PCB.nextPID++;   //PID generado automaticamente
         this.pName = pName;
         this.tBurst = burstTime;
-        this.tInitBurst = burstTime;
         this.arrivalTime = arrivalTime;
     }
 
@@ -30,18 +29,14 @@ public class PCB {
      *
      * @param currentTime Tiempo actual
      */
-    public synchronized void running(long currentTime) {
+    public void running(long currentTime) {
         this.active = true;
         if (currentTime == this.arrivalTime) {
             this.arrived = true;
         }
-        if (tBurst == tInitBurst) {
-            this.startTime = currentTime;
-        }
         this.tBurst--;
         if (this.tBurst == 0) {
             this.finished = true;
-            this.finishedTime = currentTime;
         }
     }
 
@@ -50,7 +45,7 @@ public class PCB {
      *
      * @param currentTime Tiempo actual
      */
-    public synchronized void waiting(long currentTime) {
+    public void waiting(long currentTime) {
         if (currentTime == this.arrivalTime) {
             this.arrived = true;
         }
@@ -69,20 +64,6 @@ public class PCB {
     }
 
     /**
-     * @return Tiempo en que el proceso finaliza
-     */
-    public long getFinishedTime() {
-        return this.finishedTime;
-    }
-
-    /**
-     * @return Tiemo de inicio
-     */
-    public long getStartTime() {
-        return this.startTime;
-    }
-
-    /**
      * @return Tiempo de llegada
      */
     public int getArrivalTime() {
@@ -94,14 +75,6 @@ public class PCB {
      */
     public int getBurstTime() {
         return this.tBurst;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int gettInitBurst() {
-        return this.tInitBurst;
     }
 
     /**
@@ -119,7 +92,7 @@ public class PCB {
     }
 
     /**
-     * @return
+     * @return 
      */
     public boolean isArrived() {
         return this.arrived;

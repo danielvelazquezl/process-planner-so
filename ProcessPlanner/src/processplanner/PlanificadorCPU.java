@@ -18,28 +18,13 @@ public class PlanificadorCPU {
     public static final int SJF = 2;
     public static final int MULTIQUEUE = 3;
 
-    /**
-     * Tiempo transcurrido
-     */
     private long currentTime = 0;
-
-    /**
-     * Tiempo de inactividad transcurrdio
-     */
     private long inactivityTime = 0;
-
-    /**
-     * Tiempo transcurrido que el CPU estuvo ocupado
-     */
     private long occupiedTime = 0;
-
-    /**
-     * Porcion de tiempo para Round Robin
-     */
     private int quantum = 2;
 
     /**
-     * Cuenta atras de cuando interrumpir un proceso, porque su quantum termino
+     * Contador para saber cuando termina el quantum del proceso
      */
     private int quantumCounter = quantum;
 
@@ -54,15 +39,23 @@ public class PlanificadorCPU {
     private int algorithm = FCFS;
 
     /**
-     * Coleccion de todos los procesos que seran usados
+     * Todos los procesos
      */
     private ArrayList<PCB> workQueue = new ArrayList<>();
 
     /**
-     * Coleccion de todos los procesos que han llegado y requieren CPU
+     * Cola de listos
      */
     private ArrayList<PCB> readyQueue = new ArrayList<>();
+    
+    /**
+     * Cola de algoritmos con rafagas mayores o iguales a 10
+     */
     private ArrayList<PCB> maxQueue = new ArrayList<>();
+    
+    /**
+     * Cola de algoritmos con rafagas menores a 10 
+     */
     private ArrayList<PCB> minQueue = new ArrayList<>();
     /**
      * Referencia al proceso activo. El cpu cambia esta refencia a diferentes
@@ -70,11 +63,6 @@ public class PlanificadorCPU {
      * un criterio.
      */
     private PCB activeProcess = null;
-
-    /**
-     * index del vector en colaListos
-     */
-    private int indexActiveProcess = 0;
 
     /**
      * Flag para verificar si fue pausada la ejecucion
@@ -163,8 +151,9 @@ public class PlanificadorCPU {
     }
 
     /**
+     * Ejecutar el algoritmo FCFS
      * 
-     * @param readyQ 
+     * @param readyQ Cola de listos
      */
     public void runFCFS(ArrayList readyQ) {
         Collections.sort(readyQ, (PCB p1, PCB p2)
@@ -172,12 +161,22 @@ public class PlanificadorCPU {
         this.activeProcess = (PCB) readyQ.get(0);
     }
 
+    /**
+     * Ejecuta el algoritmo SJF
+     *  
+     * @param readyQ Cola de listos
+     */
     public void runSJF(ArrayList readyQ) {
         Collections.sort(readyQ, (PCB p1, PCB p2)
                 -> new Integer(p1.getBurstTime()).compareTo(new Integer(p2.getBurstTime())));
         this.activeProcess = (PCB) readyQ.get(0);
     }
 
+    /**
+     * Ejecuta el algoritmo Round Robin
+     * 
+     * @param readyQ Cola de listos
+     */
     private void runRoundRobin(ArrayList readyQ) {
 
         if (this.occupiedTime == 0 || activeProcess == null) {
@@ -195,6 +194,11 @@ public class PlanificadorCPU {
         this.quantumCounter--;
     }
 
+    /**
+     * Ejecuta la cola multinivel
+     * 
+     * @param readyQ Cola de listos
+     */
     private void runMultiQueue(ArrayList<PCB> readyQ) {
         for (int i = 0; i < readyQ.size(); i++) {
             if (!maxQueue.contains(readyQ.get(i)) && !minQueue.contains(readyQ.get(i))) {
@@ -216,6 +220,9 @@ public class PlanificadorCPU {
         }
     }
 
+    /**
+     * Carga la cola de listos
+     */
     private void loadReadyQueue() {
         PCB p;
         for (int i = 0; i < this.workQueue.size(); i++) {
@@ -228,6 +235,9 @@ public class PlanificadorCPU {
 
     }
 
+    /**
+     * Limpia la cola de listos
+     */
     private void cleanReadyQueue() {
         PCB p;
         for (int i = 0; i < this.readyQueue.size(); i++) {
@@ -250,6 +260,9 @@ public class PlanificadorCPU {
         while (nextCycle());
     }
 
+    /**
+     * @return Si es que aun hay ciclos por ejecutar
+     */
     public boolean nextCycle() {
         boolean moreCycles = false;
         if (this.finishedCount == this.workQueue.size()) {
@@ -272,7 +285,7 @@ public class PlanificadorCPU {
     }
 
     /**
-     * reinicia el cpu
+     * Reinicia la ejecucion del CPU
      */
     public void restart() {
         activeProcess = null;
@@ -284,6 +297,8 @@ public class PlanificadorCPU {
         avgWait = 0.0;
         workQueue.clear();
         readyQueue.clear();
+        maxQueue.clear();
+        minQueue.clear();
         loadProcess("processes.txt");
     }
 
@@ -291,6 +306,9 @@ public class PlanificadorCPU {
         this.workQueue.add(p);
     }
 
+    /**
+     * Calcula el tiempo de espera promedio 
+     */
     private void calcAVGWait() {
         PCB p = null;
         int allWaited = 0;
