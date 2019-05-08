@@ -35,7 +35,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         this.restart.addActionListener(this);
         this.addProcess.addActionListener(this);
 
-        updateUiStatus();
+        //updateUiStatus();
 
     }
 
@@ -272,7 +272,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             pause = true;
             stopSimulation();
             cpu.setPaused(true);
-        } else if (ae.getSource() == temp) {
+        }//ciclos 
+        else if (ae.getSource() == temp) {
             if (cpu.nextCycle()) {
                 updateUiStatus();
                 temp.setDelay(1000 / (int) velocity.getValue());
@@ -312,7 +313,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     private synchronized void startSimulation() {
         if (pause) {
-
+            //No hace nada
         } else {
             if (!temp.isRunning()) {
                 temp.start();
@@ -330,16 +331,21 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
         waitTime.setText(String.format("%.2f", cpu.getAvgWait()));
 
+        updateMessages();
         if (cpu.getActiveProcess() != null) {
-            updateMessages();
             updateFinished();
         }
         updateTable();
     }
 
     private void updateMessages() {
-        messages.append("Tiempo: " + cpu.getCurrentTime() + " => "
-                + cpu.getActiveProcess().getpName() + " en ejecucion\n");
+        if (cpu.getActiveProcess() == null) {
+            messages.append("Tiempo: " + (cpu.getCurrentTime()-1) + " => ocioso\n");
+        } else {
+            messages.append("Tiempo: " + (cpu.getCurrentTime()-1) + " => "
+                    + cpu.getActiveProcess().getpName() + " en ejecucion\n");
+        }
+
     }
 
     private void updateTable() {

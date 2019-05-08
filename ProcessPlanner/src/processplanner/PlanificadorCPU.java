@@ -61,7 +61,7 @@ public class PlanificadorCPU {
     /**
      * Algoritmo por defecto a utilizar
      */
-    private int algorithm = MULTIQUEUE;
+    private int algorithm = FCFS;
 
     /**
      * Coleccion de todos los procesos que seran usados
@@ -149,16 +149,16 @@ public class PlanificadorCPU {
 
     private void dispatch() {
         PCB p = null;
+        if (activeProcess != null) {
+            this.activeProcess.running(this.currentTime);
+            for (int i = 0; i < this.readyQueue.size(); ++i) {
+                p = (PCB) this.readyQueue.get(i);
+                if (p.getPid() != this.activeProcess.getPid()) {
+                    p.waiting(this.currentTime);
+                }
 
-        this.activeProcess.running(this.currentTime);
-        for (int i = 0; i < this.readyQueue.size(); ++i) {
-            p = (PCB) this.readyQueue.get(i);
-            if (p.getPid() != this.activeProcess.getPid()) {
-                p.waiting(this.currentTime);
             }
-
         }
-
     }
 
     public void runFCFS(ArrayList readyQ) {
@@ -175,35 +175,19 @@ public class PlanificadorCPU {
 
     private void runRoundRobin(ArrayList readyQ) {
 
-        try {
-            if (this.occupiedTime == 0) {
+        if (this.occupiedTime == 0 || activeProcess == null) {
+            this.activeProcess = (PCB) readyQ.get(0);
+        } else if (this.activeProcess.isFinished() || quantumCounter == 0) {
+            int pos = readyQ.indexOf(activeProcess);
+            if(pos >= (readyQ.size() - 1)){
                 this.activeProcess = (PCB) readyQ.get(0);
+            }else{
+                this.activeProcess = (PCB) readyQ.get(pos + 1);
             }
-            if (this.activeProcess.isFinished() || quantumCounter == 0) {
-                this.activeProcess = nextProcessRR(readyQ);
-                this.indexActiveProcess = readyQ.indexOf(this.activeProcess);
-                this.quantumCounter = quantum;
-            }
-            this.quantumCounter--;
-        } catch (NullPointerException e) {
+            
+            this.quantumCounter = quantum;
         }
-    }
-
-    private PCB nextProcessRR(ArrayList readyQ) {
-        PCB nextP = null;
-        int index = 0;
-
-        if (this.indexActiveProcess >= (readyQ.size() - 1)) {
-            index = 0;
-        } else if (this.activeProcess != null && this.activeProcess.isFinished()) {
-            index = this.indexActiveProcess;
-        } else {
-            index = (this.indexActiveProcess + 1);
-        }
-
-        nextP = (PCB) readyQ.get(index);
-
-        return nextP;
+        this.quantumCounter--;
     }
 
     private void runMultiQueue(ArrayList<PCB> readyQ) {
@@ -248,11 +232,74 @@ public class PlanificadorCPU {
                 finishedCount++;
             }
         }
-        if (this.algorithm == MULTIQUEUE) {
+        if (this.algorithm == MULTIQUEUE && activeProcess != null) {
             if (activeProcess.isFinished()) {
                 minQueue.remove(activeProcess);
                 maxQueue.remove(activeProcess);
             }
+        }
+    }
+
+    @SuppressWarnings("empty-statement")
+    public void simulate() {
+        while (nextCycle());
+    }
+
+    public boolean nextCycle() {
+        boolean moreCycles = false;
+        if (this.finishedCount == this.workQueue.size()) {
+            moreCycles = false;
+        } else {
+            loadReadyQueue();
+            moreCycles = true;
+            if (this.readyQueue.isEmpty()) {
+                this.inactivityTime++;
+                activeProcess = null;
+            } else {
+                planner();
+                this.occupiedTime++;
+                cleanReadyQueue();
+            }
+            this.currentTime++;
+        }
+        calcAVGWait();
+        return moreCycles;
+    }
+
+    /**
+     * reinicia el cpu
+     */
+    public void restart() {
+        activeProcess = null;
+        finishedCount = 0;
+        currentTime = 0;
+        occupiedTime = 0;
+        quantum = 4;
+        quantumCounter = quantum;
+        avgWait = 0.0;
+        workQueue.clear();
+        readyQueue.clear();
+        loadProcess("processes.txt");
+    }
+
+    public void addProcess(PCB p) {
+        this.workQueue.add(p);
+    }
+
+    private void calcAVGWait() {
+        PCB p = null;
+        int allWaited = 0;
+        for (int i = 0; i < workQueue.size(); i++) {
+            p = (PCB) workQueue.get(i);
+
+            if (p.isFinished()) {
+                // finishedCount++;
+                int waited = (int) p.gettWatingTotal();
+                allWaited += waited;
+            }
+        }
+        if (finishedCount > 0) {
+            this.avgWait = (double) allWaited / (double) finishedCount;
         }
     }
 
@@ -300,74 +347,11 @@ public class PlanificadorCPU {
         return activeProcess;
     }
 
-    @SuppressWarnings("empty-statement")
-    public void simulate() {
-        while (nextCycle());
-    }
-
-    public boolean nextCycle() {
-        boolean moreCycles = false;
-        if (this.finishedCount == this.workQueue.size()) {
-            moreCycles = false;
-        } else {
-            loadReadyQueue();
-            moreCycles = true;
-            if (this.readyQueue.isEmpty()) {
-                this.inactivityTime++;
-                //activeProcess = null;
-            } else {
-                planner();
-                this.occupiedTime++;
-                cleanReadyQueue();
-            }
-            this.currentTime++;
-        }
-        calcAVGWait();
-        return moreCycles;
-    }
-
     public Boolean isPaused() {
         return paused;
     }
 
     public void setPaused(Boolean paused) {
         this.paused = paused;
-    }
-
-    /**
-     * reinicia el cpu
-     */
-    public void restart() {
-        activeProcess = null;
-        finishedCount = 0;
-        currentTime = 0;
-        occupiedTime = 0;
-        quantum = 4;
-        quantumCounter = quantum;
-        avgWait = 0.0;
-        workQueue.clear();
-        readyQueue.clear();
-        loadProcess("processes.txt");
-    }
-
-    public void addProcess(PCB p) {
-        this.workQueue.add(p);
-    }
-
-    private void calcAVGWait() {
-        PCB p = null;
-        int allWaited = 0;
-        for (int i = 0; i < workQueue.size(); i++) {
-            p = (PCB) workQueue.get(i);
-
-            if (p.isFinished()) {
-                // finishedCount++;
-                int waited = (int) p.gettWatingTotal();
-                allWaited += waited;
-            }
-        }
-        if (finishedCount > 0) {
-            this.avgWait = (double) allWaited / (double) finishedCount;
-        }
     }
 }
