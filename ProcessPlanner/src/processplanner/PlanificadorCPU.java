@@ -209,14 +209,14 @@ public class PlanificadorCPU {
     }
 
 
-    private void runMultiQueue(ArrayList readyQ) {
+    private void runMultiQueue(ArrayList<PCB> readyQ) {
         ArrayList<PCB> maxQueue = new ArrayList<>();
-        readyQ.forEach((PCB p) -> {
-            if (p.getBurstTime() >= 10) {
-                maxQueue.add(p);
-                readyQ.remove(p);
+        for (int i = 0; i < readyQ.size(); i++) {
+            if (readyQ.get(i).getBurstTime() >= 10) {
+                maxQueue.add(readyQ.get(i));
+                readyQ.remove(i);
             }
-        });
+        }
 
         if (!readyQ.isEmpty()) {
             runRoundRobin(readyQ);
