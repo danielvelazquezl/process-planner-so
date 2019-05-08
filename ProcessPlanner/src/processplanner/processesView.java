@@ -6,7 +6,7 @@ import javax.swing.Timer;
 
 public class processesView extends javax.swing.JFrame implements ActionListener {
 
-    PlanificadorCPU cpu;
+    ProccessesPlanner cpu;
     Timer temp;
     boolean pause = true;
 
@@ -23,7 +23,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setCoalesce(false);
         temp.setInitialDelay(0);
 
-        cpu = new PlanificadorCPU("processes.txt");
+        cpu = new ProccessesPlanner("processes.txt");
 
         this.run.addActionListener(this);
         this.stop.addActionListener(this);
@@ -71,7 +71,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         velocity = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Process Manager");
+        setTitle("Monitor UI");
         setPreferredSize(new java.awt.Dimension(920, 440));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -278,13 +278,13 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         } // Algoritmos a escojer
         else if (ae.getSource() == comboBoxAlgorithms) {
             if ("FCFS".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                cpu.setAlgorithm(PlanificadorCPU.FCFS);
+                cpu.setAlgorithm(ProccessesPlanner.FCFS);
             }
             if ("SJF".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                cpu.setAlgorithm(PlanificadorCPU.SJF);
+                cpu.setAlgorithm(ProccessesPlanner.SJF);
             }
             if ("Colas multinivel".equals(comboBoxAlgorithms.getSelectedItem().toString())) {
-                cpu.setAlgorithm(PlanificadorCPU.MULTIQUEUE);
+                cpu.setAlgorithm(ProccessesPlanner.MULTIQUEUE);
             }
         } //reiniciar procesos
         else if (ae.getSource() == restart) {
