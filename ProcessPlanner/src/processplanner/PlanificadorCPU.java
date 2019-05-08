@@ -46,7 +46,7 @@ public class PlanificadorCPU {
     /**
      * Porcion de tiempo para Round Robin
      */
-    private long quantum = 4;
+    private long quantum = 2;
 
     /**
      * Cuenta atras de cuando interrumpir un proceso, porque su quantum termino
@@ -61,7 +61,7 @@ public class PlanificadorCPU {
     /**
      * Algoritmo por defecto a utilizar
      */
-    private int algorithm = FCFS;
+    private int algorithm = MULTIQUEUE;
 
     /**
      * FPS Velocidad
@@ -77,7 +77,8 @@ public class PlanificadorCPU {
      * Coleccion de todos los procesos que han llegado y requieren CPU
      */
     private ArrayList<PCB> readyQueue = new ArrayList<>();
-
+    private ArrayList<PCB> maxQueue = new ArrayList<>();
+    private ArrayList<PCB> minQueue = new ArrayList<>();
     /**
      * Referencia al proceso activo. El cpu cambia esta refencia a diferentes
      * procesos en la cola de listos usando su respectivo algoritmo a traves de
@@ -142,7 +143,7 @@ public class PlanificadorCPU {
                 runSJF(this.readyQueue);
                 break;
             case MULTIQUEUE:
-              //  runMultiQueue(this.readyQueue);
+                runMultiQueue(this.readyQueue);
                 break;
             default:
                 System.out.println("Ningun algoritmo de planificacion valido");
@@ -155,13 +156,14 @@ public class PlanificadorCPU {
         PCB p = null;
 
         this.activeProcess.running(this.currentTime);
-
         for (int i = 0; i < this.readyQueue.size(); ++i) {
             p = (PCB) this.readyQueue.get(i);
             if (p.getPid() != this.activeProcess.getPid()) {
                 p.waiting(this.currentTime);
             }
+
         }
+
     }
 
     public void runFCFS(ArrayList readyQ) {
@@ -192,7 +194,7 @@ public class PlanificadorCPU {
         }
     }
 
-   private PCB nextProcessRR(ArrayList readyQ) {
+    private PCB nextProcessRR(ArrayList readyQ) {
         PCB nextP = null;
         int index = 0;
 
@@ -209,22 +211,26 @@ public class PlanificadorCPU {
         return nextP;
     }
 
-
-    /*private void runMultiQueue(ArrayList readyQ) {
-        ArrayList<PCB> maxQueue = new ArrayList<>();
-        readyQ.forEach((PCB p) -> {
-            if (p.getBurstTime() >= 10) {
-                maxQueue.add(p);
-                readyQ.remove(p);
+    private void runMultiQueue(ArrayList<PCB> readyQ) {
+        for (int i = 0; i < readyQ.size(); i++) {
+            if (!maxQueue.contains(readyQ.get(i)) && !minQueue.contains(readyQ.get(i))) {
+                if (readyQ.get(i).getBurstTime() < 5) {
+                    minQueue.add(readyQ.get(i));
+                } else {
+                    maxQueue.add(readyQ.get(i));
+                }
             }
-        });
 
-        if (!readyQ.isEmpty()) {
-            runRoundRobin(readyQ);
-        } else if (readyQ.isEmpty() && !maxQueue.isEmpty()) {
+        }
+
+        if (!minQueue.isEmpty()) {
+            System.out.println("RR" + this.currentTime);
+            runRoundRobin(minQueue);
+        } else if (minQueue.isEmpty() && !maxQueue.isEmpty()) {
+            System.out.println("FIFO" + this.currentTime);
             runFCFS(maxQueue);
         }
-    }*/
+    }
 
     private void loadReadyQueue() {
         PCB p;
@@ -245,6 +251,12 @@ public class PlanificadorCPU {
             if (p.isFinished() == true) {
                 this.readyQueue.remove(i);
                 finishedCount++;
+            }
+        }
+        if (this.algorithm == MULTIQUEUE) {
+            if (activeProcess.isFinished()) {
+                minQueue.remove(activeProcess);
+                maxQueue.remove(activeProcess);
             }
         }
     }
@@ -307,6 +319,7 @@ public class PlanificadorCPU {
             moreCycles = true;
             if (this.readyQueue.isEmpty()) {
                 this.inactivityTime++;
+                //activeProcess = null;
             } else {
                 planner();
                 this.occupiedTime++;

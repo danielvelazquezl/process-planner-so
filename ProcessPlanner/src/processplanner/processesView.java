@@ -30,7 +30,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         temp.setInitialDelay(0);
 
         cpu = new PlanificadorCPU("processes.txt");
-        cpu.setFps(delay);
 
         this.run.addActionListener(this);
         this.stop.addActionListener(this);
@@ -318,7 +317,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
         //waitTime.setText(Double.toString((double) cpu.getAvgWait()));
         waitTime.setText(String.format("%.2f", cpu.getAvgWait()));
-        
+
         if (cpu.getActiveProcess() != null) {
             updateMessages();
             updateFinished();
@@ -362,8 +361,9 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
 
     private void loadDataTable() {
         cpu.getReadyQueue().forEach((PCB p) -> {
-            if(!p.isActive()){
-            dataTable.addRow(new Object[]{p.getpName(), p.getBurstTime(), p.getArrivalTime()});}
+            if (!p.isActive()) {
+                dataTable.addRow(new Object[]{p.getpName(), p.getBurstTime(), p.getArrivalTime()});
+            }
         });
     }
 
@@ -371,9 +371,11 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         dataTable.getDataVector().removeAllElements();
         dataTable.fireTableDataChanged();
     }
-    
+
     private void updateFinished() {
-        if (cpu.getActiveProcess().isFinished()) finished.append(cpu.getActiveProcess().getpName() + "\n");
+        if (null != cpu.getActiveProcess() && cpu.getActiveProcess().isFinished()) {
+            finished.append(cpu.getActiveProcess().getpName() + "\n");
+        }
     }
 
 }
