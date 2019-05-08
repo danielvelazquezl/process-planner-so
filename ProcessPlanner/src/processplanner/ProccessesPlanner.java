@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 // </editor-fold>    
 
-public class PlanificadorCPU {
+public class ProccessesPlanner {
 // <editor-fold defaultstate="collapsed" desc="Variables">
     /**
      * Constantes que especifican cada tipo de algoritmo
@@ -63,7 +63,7 @@ public class PlanificadorCPU {
      * 
      * @param path Direccion del archivo .txt de los procesos a ejecutar
      */
-    public PlanificadorCPU(String path) {
+    public ProccessesPlanner(String path) {
         loadProcess(path);
     }
 
