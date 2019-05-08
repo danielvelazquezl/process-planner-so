@@ -13,7 +13,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     PlanificadorCPU cpu;
 
     Timer temp;
-    int fps = 1;
     boolean pause = true;
 
     /**
@@ -24,8 +23,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         loadTable();
         initComponents();
 
-        int delay = (fps > 0) ? (1000 / fps) : 100;
-        temp = new Timer(delay, this);
+        temp = new Timer(1000, this);
         temp.setCoalesce(false);
         temp.setInitialDelay(0);
 
@@ -74,8 +72,10 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jScrollPane1 = new javax.swing.JScrollPane();
         finished = new javax.swing.JTextArea();
         jLabel10 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        quantum = new javax.swing.JSpinner();
         jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        velocity = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Process Manager");
@@ -173,12 +173,20 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         jLabel10.setText("Procesos terminados");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 160, -1, -1));
 
-        jSpinner1.setValue(4);
-        getContentPane().add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 34, 60, -1));
+        quantum.setModel(new javax.swing.SpinnerNumberModel(4, 1, 50, 1));
+        getContentPane().add(quantum, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 34, 60, -1));
 
         jLabel11.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel11.setText("Quantum");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 12, -1, -1));
+
+        jLabel12.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel12.setText("Velocidad");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 12, -1, -1));
+
+        velocity.setModel(new javax.swing.SpinnerNumberModel(1, 1, 100, 1));
+        velocity.setValue(1);
+        getContentPane().add(velocity, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 34, 60, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -228,6 +236,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -238,13 +247,14 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextArea messages;
     private javax.swing.JTextField processName;
+    private javax.swing.JSpinner quantum;
     private javax.swing.JButton restart;
     private javax.swing.JButton run;
     private javax.swing.JButton stop;
     private javax.swing.JTable table;
+    private javax.swing.JSpinner velocity;
     private javax.swing.JLabel waitTime;
     // End of variables declaration//GEN-END:variables
     private javax.swing.table.DefaultTableModel dataTable;
@@ -265,6 +275,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         } else if (ae.getSource() == temp) {
             if (cpu.nextCycle()) {
                 updateUiStatus();
+                temp.setDelay(1000 / (int) velocity.getValue());
+                cpu.setQuantum((int) quantum.getValue());
             } else {
                 stopSimulation();
             }
@@ -286,6 +298,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
             updateUiStatus();
             messages.setText("");
             finished.setText("");
+            quantum.setValue((int) 4);
+            velocity.setValue((int) 1);
             clearTable();
             repaint();
         }//Agregar proceso
@@ -294,7 +308,6 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
                     Integer.parseInt(burstAmount.getText()), (int) cpu.getCurrentTime())
             );
         }
-
     }
 
     private synchronized void startSimulation() {
@@ -313,9 +326,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    private void updateUiStatus() { //reloj
+    private void updateUiStatus() {
         cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
-        //waitTime.setText(Double.toString((double) cpu.getAvgWait()));
         waitTime.setText(String.format("%.2f", cpu.getAvgWait()));
 
         if (cpu.getActiveProcess() != null) {
@@ -373,9 +385,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     }
 
     private void updateFinished() {
-        if (null != cpu.getActiveProcess() && cpu.getActiveProcess().isFinished()) {
+        if (cpu.getActiveProcess().isFinished()) {
             finished.append(cpu.getActiveProcess().getpName() + "\n");
         }
     }
-
 }

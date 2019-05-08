@@ -46,12 +46,12 @@ public class PlanificadorCPU {
     /**
      * Porcion de tiempo para Round Robin
      */
-    private long quantum = 2;
+    private int quantum = 2;
 
     /**
      * Cuenta atras de cuando interrumpir un proceso, porque su quantum termino
      */
-    private long quantumCounter = quantum;
+    private int quantumCounter = quantum;
 
     /**
      * Para SJF expulsivo
@@ -62,11 +62,6 @@ public class PlanificadorCPU {
      * Algoritmo por defecto a utilizar
      */
     private int algorithm = MULTIQUEUE;
-
-    /**
-     * FPS Velocidad
-     */
-    private int fps = 0;
 
     /**
      * Coleccion de todos los procesos que seran usados
@@ -281,7 +276,7 @@ public class PlanificadorCPU {
         return quantum;
     }
 
-    public void setQuantum(long quantum) {
+    public void setQuantum(int quantum) {
         this.quantum = quantum;
     }
 
@@ -329,14 +324,6 @@ public class PlanificadorCPU {
         }
         calcAVGWait();
         return moreCycles;
-    }
-
-    public int getFps() {
-        return fps;
-    }
-
-    public void setFps(int fps) {
-        this.fps = fps;
     }
 
     public Boolean isPaused() {
