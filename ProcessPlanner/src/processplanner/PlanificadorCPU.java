@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package processplanner;
-// <editor-fold defaultstate="collapsed" desc="Imports">
 
+// <editor-fold defaultstate="collapsed" desc="Imports">
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,13 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 // </editor-fold>    
 
-/**
- *
- * @author junior
- */
 public class PlanificadorCPU {
 // <editor-fold defaultstate="collapsed" desc="Variables">
-
     /**
      * Constantes que especifican cada tipo de algoritmo
      */
@@ -28,35 +18,12 @@ public class PlanificadorCPU {
     public static final int SJF = 2;
     public static final int MULTIQUEUE = 3;
 
-    /**
-     * Tiempo transcurrido
-     */
     private long currentTime = 0;
-
-    /**
-     * Tiempo de inactividad transcurrdio
-     */
     private long inactivityTime = 0;
-
-    /**
-     * Tiempo transcurrido que el CPU estuvo ocupado
-     */
     private long occupiedTime = 0;
-
-    /**
-     * Porcion de tiempo para Round Robin
-     */
     private int quantum = 2;
 
-    /**
-     * Cuenta atras de cuando interrumpir un proceso, porque su quantum termino
-     */
     private int quantumCounter = quantum;
-
-    /**
-     * Para SJF expulsivo
-     */
-    boolean preemptive = true;
 
     /**
      * Algoritmo por defecto a utilizar
@@ -64,41 +31,47 @@ public class PlanificadorCPU {
     private int algorithm = FCFS;
 
     /**
-     * Coleccion de todos los procesos que seran usados
+     * Todos los procesos
      */
     private ArrayList<PCB> workQueue = new ArrayList<>();
 
     /**
-     * Coleccion de todos los procesos que han llegado y requieren CPU
+     * Cola de listos
      */
     private ArrayList<PCB> readyQueue = new ArrayList<>();
+    
+    /**
+     * Cola de algoritmos con rafagas mayores o iguales a 10
+     */
     private ArrayList<PCB> maxQueue = new ArrayList<>();
+    
+    /**
+     * Cola de algoritmos con rafagas menores a 10 
+     */
     private ArrayList<PCB> minQueue = new ArrayList<>();
     /**
-     * Referencia al proceso activo. El cpu cambia esta refencia a diferentes
-     * procesos en la cola de listos usando su respectivo algoritmo a traves de
-     * un criterio.
+     * Referencia al proceso activo. 
      */
     private PCB activeProcess = null;
-
-    /**
-     * index del vector en colaListos
-     */
-    private int indexActiveProcess = 0;
-
-    /**
-     * Flag para verificar si fue pausada la ejecucion
-     */
-    private Boolean paused = false;
 
     private double avgWait = 0;
     private int finishedCount = 0;
 // </editor-fold>    
 
+    /**
+     * Constructor del planificador
+     * 
+     * @param path Direccion del archivo .txt de los procesos a ejecutar
+     */
     public PlanificadorCPU(String path) {
         loadProcess(path);
     }
 
+    /**
+     * Carga los procesos desde el .txt al workQueue
+     * 
+     * @param path Direccion del archivo .txt a leer
+     */
     private void loadProcess(String path) {
         BufferedReader br = null;
         String line = "";
@@ -126,8 +99,7 @@ public class PlanificadorCPU {
     }
 
     /**
-     * Utilice el planificador apropiado para elegir el siguiente proceso. A
-     * continuacion, enviaremos el proceso.
+     * Ejecuta el algoritmo seleccionado en la UI
      */
     private void planner() {
         switch (this.algorithm) {
@@ -147,6 +119,9 @@ public class PlanificadorCPU {
         dispatch();
     }
 
+    /**
+     * Ejecuta el proceso y pone a los demas en espera
+     */
     private void dispatch() {
         PCB p = null;
         if (activeProcess != null) {
@@ -156,23 +131,37 @@ public class PlanificadorCPU {
                 if (p.getPid() != this.activeProcess.getPid()) {
                     p.waiting(this.currentTime);
                 }
-
             }
         }
     }
 
+    /**
+     * Ejecutar el algoritmo FCFS
+     * 
+     * @param readyQ Cola de listos
+     */
     public void runFCFS(ArrayList readyQ) {
         Collections.sort(readyQ, (PCB p1, PCB p2)
                 -> new Integer(p1.getArrivalTime()).compareTo(new Integer(p2.getArrivalTime())));
         this.activeProcess = (PCB) readyQ.get(0);
     }
 
+    /**
+     * Ejecuta el algoritmo SJF
+     *  
+     * @param readyQ Cola de listos
+     */
     public void runSJF(ArrayList readyQ) {
         Collections.sort(readyQ, (PCB p1, PCB p2)
                 -> new Integer(p1.getBurstTime()).compareTo(new Integer(p2.getBurstTime())));
         this.activeProcess = (PCB) readyQ.get(0);
     }
 
+    /**
+     * Ejecuta el algoritmo Round Robin
+     * 
+     * @param readyQ Cola de listos
+     */
     private void runRoundRobin(ArrayList readyQ) {
 
         if (this.occupiedTime == 0 || activeProcess == null) {
@@ -190,6 +179,11 @@ public class PlanificadorCPU {
         this.quantumCounter--;
     }
 
+    /**
+     * Ejecuta la cola multinivel
+     * 
+     * @param readyQ Cola de listos
+     */
     private void runMultiQueue(ArrayList<PCB> readyQ) {
         for (int i = 0; i < readyQ.size(); i++) {
             if (!maxQueue.contains(readyQ.get(i)) && !minQueue.contains(readyQ.get(i))) {
@@ -211,18 +205,23 @@ public class PlanificadorCPU {
         }
     }
 
+    /**
+     * Carga la cola de listos
+     */
     private void loadReadyQueue() {
         PCB p;
         for (int i = 0; i < this.workQueue.size(); i++) {
             p = (PCB) workQueue.get(i);
             if (p.getArrivalTime() == this.currentTime && !p.isFinished()) {
                 this.readyQueue.add(p);
-                this.preemptive = true;
             }
         }
 
     }
 
+    /**
+     * Limpia la cola de listos
+     */
     private void cleanReadyQueue() {
         PCB p;
         for (int i = 0; i < this.readyQueue.size(); i++) {
@@ -240,11 +239,9 @@ public class PlanificadorCPU {
         }
     }
 
-    @SuppressWarnings("empty-statement")
-    public void simulate() {
-        while (nextCycle());
-    }
-
+    /**
+     * @return Si es que aun hay ciclos por ejecutar
+     */
     public boolean nextCycle() {
         boolean moreCycles = false;
         if (this.finishedCount == this.workQueue.size()) {
@@ -267,7 +264,7 @@ public class PlanificadorCPU {
     }
 
     /**
-     * reinicia el cpu
+     * Reinicia la ejecucion del CPU
      */
     public void restart() {
         activeProcess = null;
@@ -279,6 +276,8 @@ public class PlanificadorCPU {
         avgWait = 0.0;
         workQueue.clear();
         readyQueue.clear();
+        maxQueue.clear();
+        minQueue.clear();
         loadProcess("processes.txt");
     }
 
@@ -286,6 +285,9 @@ public class PlanificadorCPU {
         this.workQueue.add(p);
     }
 
+    /**
+     * Calcula el tiempo de espera promedio 
+     */
     private void calcAVGWait() {
         PCB p = null;
         int allWaited = 0;
@@ -293,7 +295,6 @@ public class PlanificadorCPU {
             p = (PCB) workQueue.get(i);
 
             if (p.isFinished()) {
-                // finishedCount++;
                 int waited = (int) p.gettWatingTotal();
                 allWaited += waited;
             }
@@ -302,7 +303,7 @@ public class PlanificadorCPU {
             this.avgWait = (double) allWaited / (double) finishedCount;
         }
     }
-
+    
     public long getCurrentTime() {
         return currentTime;
     }
@@ -322,9 +323,17 @@ public class PlanificadorCPU {
     public long getQuantum() {
         return quantum;
     }
+    
+    public PCB getActiveProcess() {
+        return activeProcess;
+    }
+    
+    public ArrayList<PCB> getWorkQueue() {
+        return workQueue;
+    }
 
-    public void setQuantum(int quantum) {
-        this.quantum = quantum;
+    public ArrayList<PCB> getReadyQueue() {
+        return readyQueue;
     }
 
     public int getAlgorithm() {
@@ -334,24 +343,9 @@ public class PlanificadorCPU {
     public void setAlgorithm(int algorithm) {
         this.algorithm = algorithm;
     }
-
-    public ArrayList<PCB> getWorkQueue() {
-        return workQueue;
+    
+    public void setQuantum(int quantum) {
+        this.quantum = quantum;
     }
 
-    public ArrayList<PCB> getReadyQueue() {
-        return readyQueue;
-    }
-
-    public PCB getActiveProcess() {
-        return activeProcess;
-    }
-
-    public Boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(Boolean paused) {
-        this.paused = paused;
-    }
 }
