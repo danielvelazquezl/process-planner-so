@@ -23,15 +23,7 @@ public class ProccessesPlanner {
     private long occupiedTime = 0;
     private int quantum = 2;
 
-    /**
-     * Contador para saber cuando termina el quantum del proceso
-     */
     private int quantumCounter = quantum;
-
-    /**
-     * Para SJF expulsivo
-     */
-    boolean preemptive = true;
 
     /**
      * Algoritmo por defecto a utilizar
@@ -58,16 +50,9 @@ public class ProccessesPlanner {
      */
     private ArrayList<PCB> minQueue = new ArrayList<>();
     /**
-     * Referencia al proceso activo. El cpu cambia esta refencia a diferentes
-     * procesos en la cola de listos usando su respectivo algoritmo a traves de
-     * un criterio.
+     * Referencia al proceso activo. 
      */
     private PCB activeProcess = null;
-
-    /**
-     * Flag para verificar si fue pausada la ejecucion
-     */
-    private Boolean paused = false;
 
     private double avgWait = 0;
     private int finishedCount = 0;
@@ -135,7 +120,7 @@ public class ProccessesPlanner {
     }
 
     /**
-     * 
+     * Ejecuta el proceso y pone a los demas en espera
      */
     private void dispatch() {
         PCB p = null;
@@ -229,7 +214,6 @@ public class ProccessesPlanner {
             p = (PCB) workQueue.get(i);
             if (p.getArrivalTime() == this.currentTime && !p.isFinished()) {
                 this.readyQueue.add(p);
-                this.preemptive = true;
             }
         }
 
@@ -253,11 +237,6 @@ public class ProccessesPlanner {
                 maxQueue.remove(activeProcess);
             }
         }
-    }
-
-    @SuppressWarnings("empty-statement")
-    public void simulate() {
-        while (nextCycle());
     }
 
     /**
@@ -368,12 +347,5 @@ public class ProccessesPlanner {
     public void setQuantum(int quantum) {
         this.quantum = quantum;
     }
-    
-    public void setPaused(Boolean paused) {
-        this.paused = paused;
-    }
-    
-    public Boolean isPaused() {
-        return paused;
-    }
+
 }

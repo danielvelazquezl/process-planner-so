@@ -257,14 +257,12 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
     public void actionPerformed(ActionEvent ae) {
         //ejecutar
         if (ae.getSource() == run) {
-            cpu.setPaused(false);
             pause = false;
             startSimulation();
         } //parar la ejecucion
         else if (ae.getSource() == stop) {
             pause = true;
             stopSimulation();
-            cpu.setPaused(true);
         }//ciclos 
         else if (ae.getSource() == temp) {
             if (cpu.nextCycle()) {
@@ -304,6 +302,8 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
+
+
     private void startSimulation() {
         if (pause) {
             //No hace nada
@@ -314,7 +314,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
         }
     }
 
-    private void stopSimulation() {
+    private  void stopSimulation() {
         if (temp.isRunning()) {
             temp.stop();
         }
@@ -325,7 +325,7 @@ public class processesView extends javax.swing.JFrame implements ActionListener 
      * y los tiempos
      */
     private void updateUiStatus() {
-        cpuTime.setText(Integer.toString((int) cpu.getCurrentTime()));
+        cpuTime.setText(Integer.toString(((int) cpu.getCurrentTime())-1));
         waitTime.setText(String.format("%.2f", cpu.getAvgWait()));
 
         updateMessages();
